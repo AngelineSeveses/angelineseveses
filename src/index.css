@@ -1,0 +1,120 @@
+@import "@fontsource-variable/geist";
+@import "tailwindcss";
+
+/* Brand tokens from The Seam brand book: warm cream, deep violet, aubergine, Geist. */
+@theme {
+  --color-cream: #f5efe6;
+  --color-paper: #fbf8f2;
+  --color-ink: #1d1a22;
+  --color-quiet: #5e5866;
+  --color-violet: #5b3fc4;
+  --color-violet-hover: #4c33aa;
+  --color-night: #1f1828;
+  --color-night-2: #2a2036;
+  --color-soft: #b9a6ff;
+  --color-soft-hover: #cbbdff;
+  --color-mist: #ece5f7;
+  --color-quiet-dark: #b9b1c2;
+  --color-rule: rgb(29 26 34 / 0.12);
+  --color-rule-dark: rgb(245 239 230 / 0.14);
+  --color-success: #2f7a4f;
+
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --container-site: 1160px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    font-weight: 500;
+  }
+  ::selection {
+    background: var(--color-mist);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-violet);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .dark :focus-visible {
+    outline-color: var(--color-soft);
+  }
+}
+
+@utility wrap {
+  max-width: var(--container-site);
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 40px);
+}
+
+@utility section-pad {
+  padding-block: clamp(72px, 10vw, 136px);
+}
+
+/* The stitch: the brand's only ornament. */
+@utility stitch-v {
+  background-image: repeating-linear-gradient(180deg, var(--color-soft) 0 8px, transparent 8px 15px);
+}
+
+@utility stitch-h {
+  background-image: repeating-linear-gradient(90deg, var(--color-violet) 0 0.1em, transparent 0.1em 0.18em);
+}
+
+@keyframes sew {
+  from {
+    stroke-dashoffset: 900;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .load-stitch {
+    animation: sew 1100ms var(--ease-in-out-strong) both;
+  }
+}
+
+@keyframes answer-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  details[open] > .faq-answer {
+    animation: answer-in 220ms var(--ease-out-strong);
+  }
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}

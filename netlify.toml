@@ -1,0 +1,8 @@
+# Netlify must build the Vite app and publish the output folder,
+# otherwise it serves the raw source (index.html pointing at /src/main.tsx) and the page is blank.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.6",
+    "@fontsource-variable/newsreader": "^5.3.0",
     "@iconify/react": "^6.0.2",
     "clsx": "^2.1.1",
     "gsap": "^3.15.0",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@iconify-json/logos": "^1.2.15",
     "@iconify-json/solar": "^1.2.13",
     "@tailwindcss/vite": "^4.1.12",
     "@types/node": "^22.17.2",

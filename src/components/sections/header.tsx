@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/icon"
 import { useToast } from "@/components/ui/toast"
 import { getLenis, scrollToHash } from "@/lib/motion"
 import { site } from "@/data/content"
+import { useAudience, type Audience } from "@/lib/audience"
 import { cn } from "@/lib/utils"
 
 /** "Angeline" in the sketch weight, "Seveses" in the build weight, joined by a stitch. */
@@ -26,10 +27,39 @@ export function Wordmark({ dark = false, className }: { dark?: boolean; classNam
 const links = [
   { href: "#work", label: "Work" },
   { href: "#services", label: "Services" },
-  { href: "#process", label: "Process" },
   { href: "#about", label: "About" },
   { href: "#faq", label: "FAQ" },
 ]
+
+/** Two-way switch: the hero speaks to businesses or to employers. */
+function AudienceToggle({ className }: { className?: string }) {
+  const { audience, setAudience } = useAudience()
+  const opts: { value: Audience; label: string }[] = [
+    { value: "business", label: "For businesses" },
+    { value: "hiring", label: "For hiring" },
+  ]
+  return (
+    <div role="radiogroup" aria-label="I'm visiting as" className={cn("relative grid grid-cols-2 rounded-full bg-ink/[0.06] p-1 text-[13.5px]", className)}>
+      <span
+        aria-hidden="true"
+        className="absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full bg-paper shadow-[0_1px_3px_rgb(29_26_34/0.12)] transition-transform duration-300 ease-out-strong motion-reduce:transition-none"
+        style={{ transform: audience === "hiring" ? "translateX(100%)" : "none" }}
+      />
+      {opts.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          role="radio"
+          aria-checked={audience === o.value}
+          onClick={() => setAudience(o.value)}
+          className={cn("relative z-[1] cursor-pointer whitespace-nowrap rounded-full px-3.5 py-1.5 transition-colors duration-200", audience === o.value ? "text-ink" : "text-quiet hover:text-ink")}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  )
+}
 
 /** Which section is under the header right now. */
 function useActiveSection() {
@@ -111,22 +141,25 @@ export function Header() {
   }
 
   return (
-    <header
-      className={cn(
-        "sticky top-[env(safe-area-inset-top,0px)] z-40 border-b backdrop-blur-[18px] backdrop-saturate-[1.6] transition-[background-color,border-color,box-shadow] duration-300",
-        scrolled || open ? "border-rule bg-cream/90 shadow-[0_8px_24px_-18px_rgb(31_24_40/0.35)]" : "border-transparent bg-cream/70"
-      )}
-    >
-      <div className="wrap flex h-16 items-center justify-between gap-5">
-        <a href="#top" aria-label="Angeline Seveses, back to top" className="text-lg no-underline" onClick={(e) => go(e, "#top")}>
-          <Wordmark />
-        </a>
+    <header className="sticky top-[calc(env(safe-area-inset-top,0px)+12px)] z-40 px-[clamp(12px,3vw,32px)]">
+      <div
+        className={cn(
+          "mx-auto flex h-[60px] max-w-[1120px] items-center justify-between gap-4 rounded-2xl border pl-4 pr-2 backdrop-blur-[18px] backdrop-saturate-[1.6] transition-[background-color,border-color,box-shadow] duration-300",
+          scrolled || open ? "border-ink/12 bg-cream/90 shadow-[0_12px_30px_-20px_rgb(31_24_40/0.4)]" : "border-ink/10 bg-cream/70"
+        )}
+      >
+        <div className="flex items-center gap-5">
+          <a href="#top" aria-label="Angeline Seveses, back to top" className="text-[17px] no-underline" onClick={(e) => go(e, "#top")}>
+            <Wordmark />
+          </a>
+          <AudienceToggle className="hidden md:grid" />
+        </div>
 
         <nav aria-label="Main" className="hidden lg:block">
-          <div ref={navRef} className="relative flex items-center gap-1 rounded-full border border-rule bg-paper/70 p-1">
+          <div ref={navRef} className="relative flex items-center gap-0.5">
             <span
               aria-hidden="true"
-              className="absolute left-0 top-1 h-[calc(100%-8px)] rounded-full bg-ink transition-[transform,width,opacity] duration-300 ease-out-strong motion-reduce:transition-none"
+              className="absolute bottom-0 left-0 h-[2px] rounded-full bg-violet transition-[transform,width,opacity] duration-300 ease-out-strong motion-reduce:transition-none"
               style={{ transform: `translateX(${pill?.x ?? 0}px)`, width: pill?.w ?? 0, opacity: pill ? 1 : 0 }}
             />
             {links.map((l) => (
@@ -138,10 +171,7 @@ export function Header() {
                 href={l.href}
                 onClick={(e) => go(e, l.href)}
                 aria-current={active === l.href ? "location" : undefined}
-                className={cn(
-                  "relative z-[1] rounded-full px-4 py-1.5 text-[14.5px] no-underline transition-colors duration-200",
-                  active === l.href ? "text-cream" : "text-quiet hover:text-ink"
-                )}
+                className={cn("relative px-3 py-2 text-[14.5px] no-underline transition-colors duration-200", active === l.href ? "text-ink" : "text-quiet hover:text-ink")}
               >
                 {l.label}
               </a>
@@ -149,16 +179,8 @@ export function Header() {
           </div>
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            onClick={() => toast("Link your CV PDF here")}
-            className="hidden cursor-pointer items-center gap-1.5 rounded-full px-3 py-2 text-[14.5px] text-ink transition-colors duration-200 hover:bg-ink/5 md:inline-flex"
-          >
-            <Icon name="cv" className="h-[18px] w-[18px] text-violet" />
-            View CV
-          </button>
-          <ButtonLink href="#contact" size="sm" onClick={(e) => go(e, "#contact")}>
+        <div className="flex items-center gap-2">
+          <ButtonLink href="#contact" size="sm" variant="soft" onClick={(e) => go(e, "#contact")}>
             Start a project
           </ButtonLink>
           <button
@@ -168,7 +190,7 @@ export function Header() {
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((o) => !o)}
-            className="grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-rule bg-paper text-ink transition-transform duration-[160ms] ease-out-strong active:scale-[0.94] lg:hidden"
+            className="grid h-10 w-10 cursor-pointer place-items-center rounded-full text-ink transition-transform duration-[160ms] ease-out-strong hover:bg-ink/5 active:scale-[0.94] lg:hidden"
           >
             <Icon name={open ? "close" : "menu"} className="h-5 w-5" />
           </button>
@@ -179,9 +201,10 @@ export function Header() {
       <div
         id="mobile-menu"
         hidden={!open}
-        className="absolute inset-x-0 top-full h-[calc(100svh-64px)] overflow-y-auto border-t border-rule bg-cream lg:hidden"
+        className="absolute inset-x-[clamp(12px,3vw,32px)] top-[calc(100%+8px)] h-[calc(100svh-96px)] overflow-y-auto rounded-2xl border border-ink/10 bg-cream shadow-[0_24px_60px_-30px_rgb(31_24_40/0.5)] lg:hidden"
       >
-        <div className="wrap flex min-h-full flex-col py-8 motion-safe:animate-[menu-in_280ms_var(--ease-drawer)]">
+        <div className="flex min-h-full flex-col px-5 py-6 motion-safe:animate-[menu-in_280ms_var(--ease-drawer)]">
+          <AudienceToggle className="mb-4 md:hidden" />
           <nav aria-label="Mobile">
             <ul>
               {links.map((l, i) => (
@@ -190,7 +213,7 @@ export function Header() {
                     ref={i === 0 ? firstMenuLinkRef : undefined}
                     href={l.href}
                     onClick={(e) => go(e, l.href)}
-                    className="flex items-center justify-between py-4 text-[32px] font-light tracking-[-0.03em] no-underline"
+                    className="flex items-center justify-between py-4 font-serif text-[34px] tracking-[-0.02em] no-underline"
                   >
                     {l.label}
                     <Icon name="arrowUpRight" className="h-6 w-6 text-violet" />

@@ -26,7 +26,7 @@ export function FloatingCta() {
       ref={scope}
       id="cta"
       aria-labelledby="cta-title"
-      className="dark relative isolate grid min-h-[clamp(560px,82vh,760px)] place-items-center overflow-hidden bg-night py-[clamp(96px,12vw,160px)] text-cream"
+      className="dark relative isolate z-[1] grid min-h-[clamp(560px,82vh,760px)] place-items-center overflow-hidden rounded-t-[clamp(28px,4vw,48px)] bg-plum py-[clamp(96px,12vw,160px)] text-cream"
     >
       <Floating sensitivity={-1} className="pointer-events-none z-0 overflow-hidden">
         {floatingShots.map((s, i) => (
@@ -47,16 +47,16 @@ export function FloatingCta() {
       <div className="relative z-[2] flex max-w-[880px] flex-col items-center gap-[22px] p-[clamp(24px,4vw,40px)] text-center">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -inset-x-[18%] -inset-y-[16%] -z-10 bg-[radial-gradient(closest-side,rgb(31_24_40/0.94),rgb(31_24_40/0.78)_55%,rgb(31_24_40/0))]"
+          className="pointer-events-none absolute -inset-x-[18%] -inset-y-[16%] -z-10 bg-[radial-gradient(closest-side,rgb(42_24_56/0.95),rgb(42_24_56/0.8)_55%,rgb(42_24_56/0))]"
         />
-        <h2 id="cta-title" className="text-[clamp(44px,7.4vw,96px)] font-semibold leading-[0.98] tracking-[-0.05em]">
+        <h2 id="cta-title" className="serif-head text-[clamp(48px,7.4vw,104px)] leading-[0.98]">
           <span className="block font-extralight">Your next website</span>
-          starts here.
+          <span className="font-semibold">starts here.</span>
         </h2>
         <p className="max-w-[44ch] text-[clamp(17px,1.8vw,20px)] text-quiet-dark">
           Need a designer who understands development, or a developer who understands design? Let's turn your idea into a website that works.
         </p>
-        <ButtonLink href="#contact" tone="dark" size="lg">
+        <ButtonLink href="#contact" tone="dark" variant="soft" size="lg">
           Contact us
         </ButtonLink>
       </div>

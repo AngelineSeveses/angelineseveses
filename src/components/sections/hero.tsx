@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react"
-import { ButtonLink } from "@/components/ui/button"
+import { ButtonLink, buttonClass } from "@/components/ui/button"
 import { Icon } from "@/components/ui/icon"
 import { SplitWords } from "@/components/ui/split-words"
 import { useSeam } from "@/hooks/use-seam"
 import { gsap, prefersReducedMotion } from "@/lib/motion"
-import { heroProof, heroShowcases } from "@/data/content"
+import { heroShowcases, resultsBand, site } from "@/data/content"
+import { useAudience } from "@/lib/audience"
+import { useToast } from "@/components/ui/toast"
 import { cn } from "@/lib/utils"
 
 /** Where the seam rests: mostly "after", with a sliver of the old site for contrast. */
@@ -14,7 +16,7 @@ const REST = 30
  * A browser window whose tabs are industries. Picking a tab loads a real redesign from that world:
  * the seam sweeps across the old site, pins mark what changed, and the result counts up.
  */
-function Showcase() {
+export function Showcase() {
   const [index, setIndex] = useState(0)
   const show = heroShowcases[index]
   const frameRef = useRef<HTMLDivElement>(null)
@@ -260,116 +262,178 @@ function Showcase() {
   )
 }
 
+/** Results that ride along the seam in the hero. Each one is a real, credited number. */
+const ribbonText = resultsBand
+  .map((r) => (r.from !== undefined ? `${r.from} → ${r.to} ${r.label}, ${r.client.split(",")[0]}` : `${r.to} ${r.label}`))
+  .join("   ✦   ")
+
 /**
- * Editorial hero: one oversized headline set on two staggered lines, the intro tucked beside the first line,
- * and the browser window straddling the cream/violet boundary below it.
+ * The seam as a flowing stitch across the hero, carrying the results along it.
+ * One SVG path, drawn twice: dashed thread underneath, text on top. It drifts slowly and
+ * stops when offscreen, when the tab is hidden, or entirely under reduced motion.
  */
+function SeamRibbon() {
+  const textRef = useRef<SVGTextPathElement>(null)
+  const svgRef = useRef<SVGSVGElement>(null)
+
+  useEffect(() => {
+    const tp = textRef.current
+    const svg = svgRef.current
+    if (!tp || !svg || prefersReducedMotion()) return
+    const state = { o: 0 }
+    const tween = gsap.to(state, {
+      o: -50,
+      duration: 60,
+      ease: "none",
+      repeat: -1,
+      onUpdate: () => tp.setAttribute("startOffset", `${state.o}%`),
+    })
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting && !document.hidden ? tween.play() : tween.pause()))
+    io.observe(svg)
+    const onVis = () => (document.hidden ? tween.pause() : tween.play())
+    document.addEventListener("visibilitychange", onVis)
+    return () => {
+      io.disconnect()
+      document.removeEventListener("visibilitychange", onVis)
+      tween.kill()
+    }
+  }, [])
+
+  const d = "M -80 300 C 220 120, 420 120, 640 230 S 1080 380, 1520 150"
+  return (
+    <svg ref={svgRef} viewBox="0 0 1440 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[clamp(220px,32vw,420px)] w-full">
+      <defs>
+        <path id="seam-path" d={d} />
+      </defs>
+      <use href="#seam-path" fill="none" stroke="var(--color-violet)" strokeWidth="2" strokeDasharray="10 9" opacity="0.55" />
+      <text className="fill-ink font-serif text-[22px] italic" dy="-12">
+        <textPath ref={textRef} href="#seam-path" startOffset="0%">
+          {`${ribbonText}   ✦   ${ribbonText}   ✦   `}
+        </textPath>
+      </text>
+    </svg>
+  )
+}
+
+const copy = {
+  business: {
+    eyebrow: "Web designer and WordPress developer",
+    line1: "Websites that",
+    line2: "bring in customers.",
+    sub: "I design and build WordPress sites that make small businesses look trusted and get more enquiries.",
+  },
+  hiring: {
+    eyebrow: "Open to part-time and full-time remote roles",
+    line1: "A designer who",
+    line2: "also builds the site.",
+    sub: "4+ years taking websites from Figma to WordPress for clients in Canada, the US, Australia and the Netherlands.",
+  },
+}
+
 export function Hero() {
+  const { audience } = useAudience()
+  const toast = useToast()
+  const c = copy[audience]
   const copyRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
     if (!copyRef.current || prefersReducedMotion()) return
     const ctx = gsap.context(() => {
-      gsap.from("[data-rise]", { y: 18, duration: 1, ease: "expo.out", stagger: 0.08, delay: 0.45 })
-      gsap.from("[data-window]", { y: 60, duration: 1.3, ease: "expo.out", delay: 0.25 })
+      gsap.from("[data-rise]", { y: 16, duration: 1, ease: "expo.out", stagger: 0.08, delay: 0.4 })
     }, copyRef)
     return () => ctx.revert()
   }, [])
 
-  // The violet band starts halfway down the window, wherever the layout puts it.
-  const sectionRef = useRef<HTMLElement>(null)
-  useLayoutEffect(() => {
-    const section = sectionRef.current
-    const win = section?.querySelector<HTMLElement>("[data-window]")
-    if (!section || !win) return
-    const place = () => section.style.setProperty("--band-top", `${win.offsetTop + win.offsetHeight * 0.42}px`)
-    place()
-    const ro = new ResizeObserver(place)
-    ro.observe(section)
-    ro.observe(win)
-    return () => ro.disconnect()
-  }, [])
-
   return (
-    <section ref={sectionRef} aria-labelledby="hero-title" className="relative overflow-hidden">
-      {/* Colour block: the lower part of the hero is violet; the window sits across the edge. */}
-      <div aria-hidden="true" data-band className="pointer-events-none absolute inset-x-0 bottom-0 bg-violet" style={{ top: "var(--band-top, 60%)" }}>
-        <div className="relative mx-auto h-full max-w-site">
-          {[16.66, 33.33, 50, 66.66, 83.33].map((l) => (
-            <i key={l} className="absolute inset-y-0 w-px bg-cream/[0.07]" style={{ left: `${l}%` }} />
-          ))}
-        </div>
-      </div>
-
-      <div ref={copyRef} className="wrap relative pb-[clamp(56px,7vw,96px)] pt-[clamp(32px,5vw,64px)]">
-        <div className="relative">
-          <p data-rise className="mb-5 inline-flex items-center gap-2.5 text-[15px] text-quiet">
-            <i aria-hidden="true" className="h-2 w-2 rounded-full bg-success shadow-[0_0_0_3px_rgb(47_122_79/0.16)]" />
-            Web designer and WordPress developer, available for new projects
-          </p>
-
-          <SplitWords
-            as="h1"
-            id="hero-title"
-            trigger="load"
-            delay={0.1}
-            className="text-[clamp(52px,8vw,112px)] font-semibold leading-[0.95] tracking-[-0.055em]"
-          >
-            <span className="block font-extralight">Websites that</span>
-            <span className="block text-right max-md:text-left lg:whitespace-nowrap">bring in customers.</span>
-          </SplitWords>
-
-        </div>
-
-        {/* Under the headline: proof on the left, the pitch and buttons on the right, aligned with line two. */}
-        <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-end">
-          <ul data-rise aria-label="At a glance" className="order-2 flex flex-wrap gap-x-6 gap-y-2 text-[14.5px] text-quiet lg:order-1 lg:pb-3">
-            {heroProof.map((p) => (
-              <li key={p.label} className="flex items-baseline gap-1.5">
-                <b className="text-[17px] font-semibold tabular-nums text-violet">{p.value}</b>
-                {p.short}
-              </li>
-            ))}
-          </ul>
-          <div data-rise className="order-1 flex flex-col gap-6 lg:order-2 lg:pl-[clamp(0px,4vw,64px)]">
-            <p className="max-w-[44ch] text-[clamp(17px,1.4vw,20px)] leading-relaxed text-quiet">
-              I design and build WordPress sites that make small businesses look trusted and get more enquiries.
-            </p>
-            <div className="flex flex-none flex-wrap items-center gap-3">
-              <ButtonLink href="#contact">Start a project</ButtonLink>
-              <ButtonLink href="#work" variant="ghost">
-                See the results
+    <section aria-labelledby="hero-title" className="relative -mt-[72px] overflow-hidden pt-[72px]">
+      <div ref={copyRef} className="wrap relative z-[1] flex flex-col items-center pb-[clamp(200px,26vw,330px)] pt-[clamp(56px,9vw,120px)] text-center">
+        <p data-rise className="mb-6 text-[15px] text-quiet">
+          {c.eyebrow}
+        </p>
+        <SplitWords
+          key={audience}
+          as="h1"
+          id="hero-title"
+          trigger="load"
+          delay={0.05}
+          className="serif-head max-w-[14ch] text-[clamp(52px,8.4vw,124px)] leading-[0.96]"
+        >
+          <span className="block font-extralight">{c.line1}</span>
+          <span className="block font-semibold">{c.line2}</span>
+        </SplitWords>
+        <p data-rise className="mt-7 max-w-[42ch] text-[clamp(17px,1.5vw,20px)] leading-relaxed text-quiet">
+          {c.sub}
+        </p>
+        <div data-rise className="mt-9 flex flex-wrap items-center justify-center gap-3">
+          {audience === "business" ? (
+            <>
+              <ButtonLink href="#contact" variant="soft" size="lg">
+                Start a project
+              </ButtonLink>
+              <ButtonLink href="#before-after" variant="ghost" size="lg">
+                See a redesign
                 <Icon name="arrowDown" className="h-[18px] w-[18px]" />
               </ButtonLink>
-            </div>
-          </div>
-        </div>
-
-        <div data-window className="relative mx-auto mt-[clamp(32px,4vw,56px)] max-w-[1040px]">
-          <Showcase />
+            </>
+          ) : (
+            <>
+              <button type="button" onClick={() => toast("Link your CV PDF here")} className={buttonClass({ variant: "soft", size: "lg" })}>
+                <Icon name="cv" className="h-5 w-5" />
+                View my CV
+              </button>
+              <a href={`mailto:${site.email}`} className={buttonClass({ variant: "ghost", size: "lg" })}>
+                <Icon name="mail" className="h-5 w-5" />
+                Email me
+              </a>
+            </>
+          )}
         </div>
       </div>
+      <SeamRibbon />
     </section>
   )
 }
 
-export function Trust() {
+/** Client names set as a typographic band: honest proof without borrowing anyone's logo. */
+export function ClientBand() {
+  const clients = ["G&L Auto", "CleanSpace", "Impact Cleaning", "Froggy Fence", "New Media Services", "Burlington Food Hall", "D&M Tilt 'n Load", "Ottawa Millwork"]
   return (
-    <div className="border-b border-rule bg-paper py-9">
-      <div className="wrap grid gap-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:items-center">
-        <blockquote className="m-0">
-          <p className="text-[clamp(18px,1.9vw,21px)] font-light leading-snug tracking-[-0.02em]">
-            "Professional, creative, and always on time. They helped us translate our ideas into a powerful online presence."
-          </p>
-          <footer className="mt-2 text-sm text-quiet">Celine Terrado, Web Designer</footer>
-        </blockquote>
-        <dl className="grid gap-x-6 gap-y-2 text-[15px] sm:grid-cols-[110px_minmax(0,1fr)]">
-          <dt className="text-quiet">Industries</dt>
-          <dd>Contractors, cleaning, auto repair, BPO, food halls, SaaS</dd>
-          <dt className="text-quiet">Clients in</dt>
-          <dd>Canada, the US, Australia and the Netherlands</dd>
-        </dl>
+    <div className="relative z-[1] rounded-t-[clamp(28px,4vw,48px)] bg-band pb-[clamp(72px,9vw,120px)] pt-[clamp(36px,4vw,52px)] text-cream">
+      <div className="wrap">
+        <p className="text-center text-[13.5px] text-cream/60">Websites I've designed and built for</p>
+        <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-[clamp(24px,4vw,56px)] gap-y-4">
+          {clients.map((c) => (
+            <li key={c} className="whitespace-nowrap font-serif text-[clamp(20px,2.2vw,28px)] italic text-cream/85">
+              {c}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
+  )
+}
+
+/** The plum sheet: pick an industry, drag the seam, see the result. */
+export function BeforeAfter() {
+  return (
+    <section
+      id="before-after"
+      aria-labelledby="ba-title"
+      className="dark relative z-[2] -mt-[clamp(40px,5vw,64px)] rounded-[clamp(28px,4vw,48px)] bg-plum pb-[clamp(64px,8vw,112px)] pt-[clamp(56px,7vw,96px)] text-cream"
+    >
+      <div className="wrap">
+        <div className="mx-auto mb-[clamp(36px,5vw,64px)] max-w-[760px] text-center">
+          <SplitWords id="ba-title" className="serif-head text-[clamp(42px,6vw,84px)] leading-[1]">
+            <span className="font-extralight">From dated</span> <span className="font-semibold">to trusted.</span>
+          </SplitWords>
+          <p className="mx-auto mt-5 max-w-[46ch] text-[clamp(16px,1.4vw,19px)] text-cream/75">
+            Real client sites. Pick an industry, then drag the line to compare the old site with my redesign.
+          </p>
+        </div>
+        <div className="mx-auto max-w-[1040px]">
+          <Showcase />
+        </div>
+      </div>
+    </section>
   )
 }

@@ -10,7 +10,7 @@ export function SectionHead({ kicker, title, lede, dark = false, id }: Props) {
     <div className="mb-[clamp(40px,6vw,72px)] grid items-end gap-[clamp(24px,4vw,64px)] md:grid-cols-2">
       <div>
         <span className={cn("mb-3.5 block text-[15px] font-medium", dark ? "text-soft" : "text-violet")}>{kicker}</span>
-        <SplitWords id={id} className="text-[clamp(36px,5.2vw,60px)] leading-[1.04] tracking-[-0.04em]">
+        <SplitWords id={id} className="serif-head text-[clamp(40px,5.6vw,68px)] leading-[1.02]">
           {title}
         </SplitWords>
       </div>

@@ -9,6 +9,7 @@ import imAfter from "@/assets/projects/impact-live.jpg"
 import frBefore from "@/assets/projects/froggy-2508.jpg"
 import frAfter from "@/assets/projects/froggy-live.jpg"
 import burlington from "@/assets/projects/burlington-live.jpg"
+import type { IconName } from "@/components/ui/icon"
 import dm from "@/assets/projects/dm.jpg"
 import ottawa from "@/assets/projects/ottawa.jpg"
 
@@ -37,13 +38,6 @@ export const site = {
   replyTime: "[24–48 hours]",
   hours: "[your hours and time zone]",
 }
-
-/** Hero proof points: every number here is checked (Lighthouse, Oct 2026) or from Angeline's own history. */
-export const heroProof = [
-  { value: "4+", label: "years designing and building", short: "years" },
-  { value: "20+", label: "business websites", short: "business websites" },
-  { value: "100", label: "SEO score on 8 sites", short: "SEO score on 8 sites" },
-]
 
 /** Before → after numbers for the results band. "from" is omitted for single scores. */
 export const resultsBand: { from?: string; to: string; label: string; client: string }[] = [
@@ -179,25 +173,64 @@ export const devWorks: DevWork[] = [
 export const moreProjects =
   "White Glove Services, Digitaletimmerman, Genesys, Bidfood, Dutch Dragons, Fiftyone-fifty, Choise School System, Rehive, Crusaders Fence, Fence Haven, J&A Fence, Integra Built, Trace Design, Voxtech, Clarity Growth, Migrate, Streets and Playkido."
 
-export const caseStudy = {
-  title: "Rebuilding a BPO website around what clients look for.",
-  intro: "New Media Services, 2024 to 2025 redesign. Designer and developer, Figma and WordPress.",
-  image: { src: nmsAfter, alt: "The redesigned New Media Services homepage" },
-  blocks: [
-    { title: "The challenge", body: "The 2024 homepage was dark, with a long paragraph under the headline and a single call to action. All services sat in one block, so visitors had to dig to find the one they needed." },
-    { title: "The approach", body: 'I followed the client\'s marketing direction: lead with the "Human and AI" message, open the layout up, show real people, and give every service its own place on the page.' },
-    { title: "The solution", body: 'A light, responsive homepage with a large centred headline, team photos, dedicated sections for each service, a case studies link, and "Book a Meeting" repeated where visitors decide.' },
-    { title: "The outcome", body: "Calls to action went from 1 to 4, and services went from one shared block to their own sections. The live site scores 100 for SEO and 100 for accessibility in Google Lighthouse." },
-  ],
-}
-
 export type ServiceKey = "design" | "wordpress" | "frontend" | "care" | "agency"
 
-export const services: { key: ServiceKey; title: string; summary: string; items: string[]; bestFor: string; price: string; cta: string }[] = [
-  { key: "design", title: "Website design and UI/UX", summary: "Websites and app interfaces that build trust and guide visitors to act.", items: ["Website and landing page design", "Figma wireframes and interactive prototypes", "Website and mobile app UI/UX", "Redesigns of outdated or hard-to-use sites"], bestFor: "For businesses that need a professional, easy-to-use design.", price: "[$ your price]", cta: "Discuss a design project" },
-  { key: "wordpress", title: "WordPress development", summary: "Fast, flexible WordPress sites your team can manage.", items: ["Figma-to-WordPress builds", "Oxygen Builder and Elementor", "Custom Post Types and ACF", "Custom CSS and JavaScript", "Responsive fixes and layout work"], bestFor: "For businesses that want a site they can update themselves.", price: "[$ your price]", cta: "Build my WordPress site" },
-  { key: "frontend", title: "Frontend development", summary: "Designs turned into clean, responsive, interactive code.", items: ["HTML, CSS and JavaScript", "React and Tailwind interfaces", "Figma-to-code implementation", "Interactive components and animation"], bestFor: "For teams that need a design built or a frontend improved.", price: "[$ your price]", cta: "Discuss a build" },
-  { key: "care", title: "Website care", summary: "Ongoing support so your site stays updated and working.", items: ["WordPress, theme and plugin updates", "Backups and basic security checks", "Speed improvements", "Content updates and layout fixes"], bestFor: "For businesses that want one reliable person for their website.", price: "[$ / month]", cta: "Improve my website" },
+export type Service = {
+  key: ServiceKey
+  icon: IconName
+  title: string
+  summary: string
+  items: string[]
+  bestFor: string
+  price: string
+  cta: string
+  /** A real project that shows this service, when there is one. */
+  example?: { name: string; note: string; src: string; alt: string }
+}
+
+export const services: Service[] = [
+  {
+    key: "design",
+    icon: "design",
+    title: "Website design and UI/UX",
+    summary: "Websites and app interfaces that build trust and guide visitors to act.",
+    items: ["Website and landing page design", "Figma wireframes and prototypes", "Website and mobile app UI/UX", "Redesigns of outdated sites"],
+    bestFor: "Businesses that need a professional, easy-to-use design.",
+    price: "[$ your price]",
+    cta: "Discuss a design project",
+    example: { name: "Froggy Fence", note: "Redesign, 2026", src: frAfter, alt: "Froggy Fence homepage after the redesign" },
+  },
+  {
+    key: "wordpress",
+    icon: "site",
+    title: "WordPress development",
+    summary: "Fast, flexible WordPress sites your team can manage.",
+    items: ["Figma-to-WordPress builds", "Oxygen Builder and Elementor", "Custom Post Types and ACF", "Custom CSS and JavaScript"],
+    bestFor: "Businesses that want a site they can update themselves.",
+    price: "[$ your price]",
+    cta: "Build my WordPress site",
+    example: { name: "Burlington Food Hall", note: "WordPress build, 2025", src: burlington, alt: "Burlington Food Hall homepage built in WordPress" },
+  },
+  {
+    key: "frontend",
+    icon: "code",
+    title: "Frontend development",
+    summary: "Designs turned into clean, responsive, interactive code.",
+    items: ["HTML, CSS and JavaScript", "React and Tailwind interfaces", "Figma-to-code implementation", "Interactive components and animation"],
+    bestFor: "Teams that need a design built or a frontend improved.",
+    price: "[$ your price]",
+    cta: "Discuss a build",
+  },
+  {
+    key: "care",
+    icon: "care",
+    title: "Website care",
+    summary: "Ongoing support so your site stays updated and working.",
+    items: ["WordPress, theme and plugin updates", "Backups and security checks", "Speed improvements", "Content updates and layout fixes"],
+    bestFor: "Businesses that want one reliable person for their website.",
+    price: "[$ / month]",
+    cta: "Improve my website",
+  },
 ]
 
 export const testimonials = [
@@ -205,11 +238,11 @@ export const testimonials = [
   { quote: "Professional, creative, and always on time. They helped us translate our ideas into a powerful online presence that truly connects with our audience.", name: "Celine Terrado", role: "Web Designer, Freelance", initials: "CT" },
 ]
 
-export const steps = [
-  { title: "Discover", body: "We talk through your goals, audience, content and must-haves." },
-  { title: "Design", body: "I plan the structure with wireframes, then design the look in Figma for your feedback." },
-  { title: "Build", body: "I build the responsive site in WordPress or code and test it on desktop, tablet and mobile." },
-  { title: "Launch", body: "I polish the details, launch, show you how to manage it, and stay available for updates." },
+export const steps: { title: string; body: string; icon: IconName; get: string }[] = [
+  { title: "Discover", icon: "chat", body: "We talk through your goals, audience, content and must-haves.", get: "A clear project brief" },
+  { title: "Design", icon: "pen", body: "I plan the structure with wireframes, then design the look in Figma for your feedback.", get: "A Figma design you approve" },
+  { title: "Build", icon: "code", body: "I build the responsive site in WordPress or code and test it on desktop, tablet and mobile.", get: "A working preview site" },
+  { title: "Launch", icon: "rocket", body: "I polish the details, launch, show you how to manage it, and stay available for updates.", get: "Your live site and a handover" },
 ]
 
 export const experience = [
@@ -218,11 +251,14 @@ export const experience = [
   { role: "Freelance web designer and WordPress developer", dates: "[Year] to now", body: "Design and development projects for clients worldwide." },
 ]
 
-export const skills = [
-  { group: "Design", items: ["Figma", "Wireframing", "Prototyping", "UI/UX", "Photoshop", "Illustrator"] },
-  { group: "WordPress", items: ["WordPress", "Oxygen Builder", "Elementor", "Custom Post Types", "ACF"] },
-  { group: "Frontend", items: ["HTML5", "CSS3", "JavaScript", "React", "Tailwind CSS", "Bootstrap"] },
-  { group: "Workflow", items: ["VS Code", "Browser DevTools", "Design handoff", "Lighthouse audits"] },
+export type Tool = { name: string; icon: IconName }
+
+/** Real logos only where an official mark exists in the logo set; others get a neutral icon tile. */
+export const skills: { group: string; tools: Tool[] }[] = [
+  { group: "Design", tools: [{ name: "Figma", icon: "logo_figma" }, { name: "Photoshop", icon: "logo_photoshop" }, { name: "Illustrator", icon: "logo_illustrator" }, { name: "Wireframing", icon: "pen" }, { name: "Prototyping", icon: "layers" }, { name: "UI/UX", icon: "design" }] },
+  { group: "WordPress", tools: [{ name: "WordPress", icon: "logo_wordpress" }, { name: "Oxygen Builder", icon: "layers" }, { name: "Elementor", icon: "widget" }, { name: "Custom Post Types", icon: "layers" }, { name: "ACF", icon: "widget" }] },
+  { group: "Frontend", tools: [{ name: "HTML5", icon: "logo_html" }, { name: "CSS3", icon: "logo_css" }, { name: "JavaScript", icon: "logo_javascript" }, { name: "React", icon: "logo_react" }, { name: "Tailwind CSS", icon: "logo_tailwind" }, { name: "Bootstrap", icon: "logo_bootstrap" }] },
+  { group: "Workflow", tools: [{ name: "VS Code", icon: "logo_vscode" }, { name: "Chrome DevTools", icon: "logo_chrome" }, { name: "Lighthouse", icon: "logo_lighthouse" }, { name: "Design handoff", icon: "pen" }] },
 ]
 
 export const faqs = [

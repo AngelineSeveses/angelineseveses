@@ -1,7 +1,7 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react"
 import { cn } from "@/lib/utils"
 
-type Variant = "primary" | "ghost"
+type Variant = "primary" | "ghost" | "soft"
 type Size = "sm" | "md" | "lg"
 type Tone = "light" | "dark"
 
@@ -19,10 +19,12 @@ const variants: Record<Tone, Record<Variant, string>> = {
   light: {
     primary: "bg-violet text-paper border-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-violet-hover",
     ghost: "bg-transparent text-ink border-ink/25 [@media(hover:hover)_and_(pointer:fine)]:hover:border-ink",
+    soft: "bg-lavender text-ink border-ink [@media(hover:hover)_and_(pointer:fine)]:hover:bg-lavender-deep",
   },
   dark: {
     primary: "bg-soft text-night border-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-soft-hover",
     ghost: "bg-transparent text-cream border-cream/30 [@media(hover:hover)_and_(pointer:fine)]:hover:border-cream",
+    soft: "bg-lavender text-ink border-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-cream",
   },
 }
 

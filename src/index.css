@@ -1,10 +1,12 @@
 @import "@fontsource-variable/geist";
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
 @import "tailwindcss";
 @import "lenis/dist/lenis.css";
 
 /* Brand tokens from The Seam brand book: warm cream, deep violet, aubergine, Geist. */
 @theme {
-  --color-cream: #f5efe6;
+  --color-cream: #faf6ec;
   --color-paper: #fbf8f2;
   --color-ink: #1d1a22;
   --color-quiet: #5e5866;
@@ -19,8 +21,15 @@
   --color-rule: rgb(29 26 34 / 0.12);
   --color-rule-dark: rgb(245 239 230 / 0.14);
   --color-success: #2f7a4f;
+  /* Sheets and accents for the editorial layout. */
+  --color-plum: #2a1838;
+  --color-plum-2: #3a2350;
+  --color-lavender: #e4d7ff;
+  --color-lavender-deep: #cdb8fb;
+  --color-band: #18141d;
 
   --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Newsreader Variable", "Iowan Old Style", Georgia, "Times New Roman", serif;
 
   --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
@@ -133,4 +142,22 @@
 
 summary::-webkit-details-marker {
   display: none;
+}
+
+/*
+ * Editorial headings: the two-weight pairs used across the site become serif,
+ * with the second phrase set in italic. One rule, so every section stays consistent.
+ */
+.serif-head {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-optical-sizing: auto;
+}
+.serif-head .font-extralight {
+  font-weight: 400;
+}
+.serif-head .font-semibold {
+  font-weight: 400;
+  font-style: italic;
 }

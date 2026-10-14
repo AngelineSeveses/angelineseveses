@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, type KeyboardEvent, type PointerEvent, type RefObject } from "react"
 import { useReducedMotion } from "motion/react"
+import { gsap } from "@/lib/motion"
 
-const SNAPS = [12, 50, 88]
+const DEFAULT_SNAPS = [12, 50, 88]
 
 /** Rubber-band past the edges: the further you drag, the less it follows. */
 function rubberband(p: number) {
@@ -29,9 +30,14 @@ function project(velocity: number, decel = 0.998) {
  * and a critically damped spring (damping 1.0, response 0.4s) that carries the release velocity.
  * Writes straight to a CSS variable so React doesn't re-render on every frame.
  */
-export function useSeam(containerRef: RefObject<HTMLDivElement | null>, knobRef: RefObject<HTMLButtonElement | null>) {
+export function useSeam(
+  containerRef: RefObject<HTMLDivElement | null>,
+  knobRef: RefObject<HTMLButtonElement | null>,
+  { initial = 50, snaps = DEFAULT_SNAPS }: { initial?: number; snaps?: number[] } = {}
+) {
   const reduce = useReducedMotion()
-  const pos = useRef(50)
+  const pos = useRef(initial)
+  const tween = useRef<gsap.core.Tween | null>(null)
   const raf = useRef(0)
   const dragging = useRef(false)
   const offset = useRef(0)
@@ -44,8 +50,40 @@ export function useSeam(containerRef: RefObject<HTMLDivElement | null>, knobRef:
 
   useEffect(() => {
     render()
-    return () => cancelAnimationFrame(raf.current)
+    return () => {
+      cancelAnimationFrame(raf.current)
+      tween.current?.kill()
+    }
   }, [render])
+
+  /** Scripted sweep (intro, project switch). Any drag interrupts it from the current position. */
+  const sweep = useCallback(
+    (from: number, to: number, opts: { duration?: number; delay?: number; onComplete?: () => void } = {}) => {
+      tween.current?.kill()
+      cancelAnimationFrame(raf.current)
+      if (reduce) {
+        pos.current = to
+        render()
+        opts.onComplete?.()
+        return
+      }
+      const proxy = { p: from }
+      pos.current = from
+      render()
+      tween.current = gsap.to(proxy, {
+        p: to,
+        duration: opts.duration ?? 1.2,
+        delay: opts.delay ?? 0,
+        ease: "power3.inOut",
+        onUpdate: () => {
+          pos.current = proxy.p
+          render()
+        },
+        onComplete: opts.onComplete,
+      })
+    },
+    [reduce, render]
+  )
 
   const percent = (clientX: number) => {
     const r = containerRef.current!.getBoundingClientRect()
@@ -83,6 +121,7 @@ export function useSeam(containerRef: RefObject<HTMLDivElement | null>, knobRef:
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0) return
     dragging.current = true
+    tween.current?.kill()
     cancelAnimationFrame(raf.current)
     e.currentTarget.setPointerCapture(e.pointerId)
     const onKnob = (e.target as HTMLElement).closest("[data-seam-knob]")
@@ -110,7 +149,7 @@ export function useSeam(containerRef: RefObject<HTMLDivElement | null>, knobRef:
     const b = h[h.length - 1]
     const velocity = ((b.p - a.p) / Math.max(1, b.t - a.t)) * 1000
     const projected = pos.current + project(velocity) / 10
-    const target = SNAPS.reduce((x, y) => (Math.abs(y - projected) < Math.abs(x - projected) ? y : x))
+    const target = snaps.reduce((x, y) => (Math.abs(y - projected) < Math.abs(x - projected) ? y : x))
     springTo(target, velocity)
   }
 
@@ -118,12 +157,14 @@ export function useSeam(containerRef: RefObject<HTMLDivElement | null>, knobRef:
     const step = { ArrowLeft: -5, ArrowRight: 5, Home: -100, End: 100 }[e.key]
     if (step === undefined) return
     e.preventDefault()
+    tween.current?.kill()
     cancelAnimationFrame(raf.current)
     pos.current = Math.max(0, Math.min(100, pos.current + step))
     render()
   }
 
   return {
+    sweep,
     containerProps: { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp },
     knobProps: { onKeyDown, "data-seam-knob": true },
   }

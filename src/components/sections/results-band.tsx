@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react"
+import { Icon } from "@/components/ui/icon"
 import { resultsBand } from "@/data/content"
 import { cn } from "@/lib/utils"
 
@@ -14,7 +14,7 @@ export function ResultsBand() {
           </h2>
           <a href="#work" className="inline-flex items-center gap-2 text-[15px] text-soft no-underline transition-colors duration-200 hover:text-cream">
             See the projects
-            <ArrowRight className="h-4 w-4" strokeWidth={1.8} aria-hidden="true" />
+            <Icon name="arrow" className="h-4 w-4" />
           </a>
         </div>
         <dl className="grid border-t border-rule-dark sm:grid-cols-2 lg:grid-cols-4">
@@ -36,7 +36,7 @@ export function ResultsBand() {
                 {r.from !== undefined && (
                   <>
                     <span className="font-extralight text-quiet-dark">{r.from}</span>
-                    <ArrowRight className="h-[0.42em] w-[0.42em] self-center text-soft" strokeWidth={1.6} aria-label="to" />
+                    <Icon name="arrow" className="h-[0.42em] w-[0.42em] self-center text-soft" label="to" />
                   </>
                 )}
                 <span className="font-semibold">{r.to}</span>

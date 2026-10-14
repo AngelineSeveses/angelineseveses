@@ -9,8 +9,10 @@ import { About, Agencies, CaseStudy, Faq, Process, Services, Skills, Testimonial
 import { FloatingCta } from "@/components/sections/floating-cta"
 import { Contact, Footer } from "@/components/sections/contact"
 import type { ServiceKey } from "@/data/content"
+import { useSmoothScroll } from "@/lib/motion"
 
 export default function App() {
+  useSmoothScroll()
   const [service, setService] = useState<ServiceKey>("design")
   const [type, setType] = useState("Freelance project")
 

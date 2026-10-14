@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react"
 import { useReducedMotion } from "motion/react"
-import { Plus } from "lucide-react"
+import { Icon } from "@/components/ui/icon"
 import { ButtonLink, Button } from "@/components/ui/button"
 import { Fill } from "@/components/ui/fill"
 import { SectionHead } from "@/components/ui/section-head"
@@ -131,9 +131,6 @@ export function Testimonials() {
             <blockquote key={t.name}>
               <p className="text-[clamp(21px,2.3vw,27px)] font-light leading-[1.38] tracking-[-0.025em]">"{t.quote}"</p>
               <footer className="mt-5 flex items-center gap-3 text-[15px]">
-                <span aria-hidden="true" className="grid h-10 w-10 flex-none place-items-center rounded-full bg-mist text-sm font-medium text-violet">
-                  {t.initials}
-                </span>
                 <span>
                   <b className="font-medium">{t.name}</b>
                   <br />
@@ -301,7 +298,7 @@ export function Faq() {
                   aria-hidden="true"
                   className="grid h-8 w-8 flex-none place-items-center rounded-full border border-rule transition-[transform,background-color] duration-200 ease-out-strong group-open:rotate-45 group-open:border-transparent group-open:bg-mist group-open:text-violet"
                 >
-                  <Plus className="h-3.5 w-3.5" strokeWidth={2} />
+                  <Icon name="plus" className="h-3.5 w-3.5" />
                 </span>
               </summary>
               <div className="faq-answer max-w-[70ch] pb-[26px] pr-14 text-quiet">

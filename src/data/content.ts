@@ -21,6 +21,11 @@ import tBu from "@/assets/thumbs/burlington-live.jpg"
 import tDm from "@/assets/thumbs/dm.jpg"
 import tOt from "@/assets/thumbs/ottawa.jpg"
 
+/**
+ * Media provenance: every project image is a screenshot of the client's live site (October 2026)
+ * or of its Internet Archive snapshot (the "before" versions), shown as portfolio work by the designer.
+ */
+
 /** Text in square brackets is a placeholder for Angeline to fill in. */
 export const site = {
   name: { first: "Angeline", last: "Seveses" },
@@ -35,9 +40,9 @@ export const site = {
 
 /** Hero proof points: every number here is checked (Lighthouse, Oct 2026) or from Angeline's own history. */
 export const heroProof = [
-  { value: "4+", label: "years designing and building" },
-  { value: "20+", label: "business websites" },
-  { value: "8", label: "sites scoring 100 for SEO" },
+  { value: "4+", label: "years designing and building", short: "years" },
+  { value: "20+", label: "business websites", short: "business websites" },
+  { value: "100", label: "SEO score on 8 sites", short: "SEO score on 8 sites" },
 ]
 
 /** Before → after numbers for the results band. "from" is omitted for single scores. */
@@ -239,4 +244,58 @@ export const floatingShots = [
   { src: tBu, depth: 2, className: "top-[66%] left-[78%] w-[clamp(140px,15vw,230px)] aspect-[4/5] max-md:top-[74%] max-md:left-[66%]" },
   { src: tDm, depth: 4, className: "top-[72%] left-[12%] w-[clamp(170px,19vw,290px)] aspect-[16/10] max-md:top-[86%] max-md:left-[22%]" },
   { src: tOt, depth: 1, className: "top-[80%] left-[48%] w-[clamp(110px,12vw,180px)] aspect-[4/3] max-md:hidden" },
+]
+
+export type Pin = { x: string; y: string; label: string; why: string }
+
+/** Hero showcase: one real redesign per industry, with what changed and why it brings customers. */
+export const heroShowcases: { industry: string; client: string; place: string; url: string; project: Redesign; pins: Pin[] }[] = [
+  {
+    industry: "Auto repair",
+    client: "G&L Auto",
+    place: "Navan, Ontario, since 1973",
+    url: "glauto.ca",
+    project: redesigns[0],
+    pins: [
+      { x: "70%", y: "14%", label: "Phone in the header", why: "0 → 15 tap-to-call links" },
+      { x: "87%", y: "14%", label: "Request Service button", why: "Always one click away" },
+      { x: "61%", y: "33%", label: "Quote form in the hero", why: "0 → 2 request forms" },
+    ],
+  },
+  {
+    industry: "Cleaning",
+    client: "CleanSpace",
+    place: "Florida",
+    url: "cleanspaceonline.com",
+    project: redesigns[1],
+    pins: [
+      { x: "42%", y: "26%", label: "A headline that says where", why: "\"Commercial Cleaning Services in Florida\"" },
+      { x: "61%", y: "27%", label: "Quote form above the fold", why: "No scrolling to ask for a price" },
+      { x: "88%", y: "9%", label: "Phone always visible", why: "2 → 12 tap-to-call links" },
+    ],
+  },
+  {
+    industry: "Facilities",
+    client: "Impact Cleaning",
+    place: "Canada, since 1954",
+    url: "impact.ca",
+    project: redesigns[2],
+    pins: [
+      { x: "40%", y: "25%", label: "Guarantee up front", why: "Trust before the first scroll" },
+      { x: "66%", y: "57%", label: "\"Let's talk\" in the hero", why: "0 → 2 contact forms" },
+      { x: "90%", y: "10%", label: "Certifications in the header", why: "Proof buyers look for" },
+    ],
+  },
+  {
+    industry: "Fencing",
+    client: "Froggy Fence",
+    place: "Greater Sacramento, CA",
+    url: "froggyfence.com",
+    project: redesigns[3],
+    pins: [
+      { x: "86%", y: "13%", label: "Free quote in the header", why: "One tap from any page" },
+      { x: "40%", y: "81%", label: "Headline written for search", why: "\"#1 Rated Fence Company\"" },
+      { x: "62%", y: "91%", label: "Estimate button by the copy", why: "Ask while they're convinced" },
+    ],
+  },
 ]

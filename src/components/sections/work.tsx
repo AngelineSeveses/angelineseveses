@@ -1,4 +1,4 @@
-import { Check } from "lucide-react"
+import { Icon } from "@/components/ui/icon"
 import { CompareSlider } from "@/components/ui/compare-slider"
 import { SectionHead } from "@/components/ui/section-head"
 import { devWorks, featured, moreProjects, redesigns, type DevWork, type Redesign } from "@/data/content"
@@ -9,7 +9,7 @@ function Results({ items, compact = false }: { items: string[]; compact?: boolea
     <ul className={cn("border-t border-rule", compact ? "mt-3.5" : "mt-5")}>
       {items.map((r) => (
         <li key={r} className={cn("flex gap-3 border-b border-rule", compact ? "py-2 text-[15px]" : "py-[11px] text-[15.5px]")}>
-          <Check className="mt-[3px] h-[18px] w-[18px] flex-none text-violet" strokeWidth={2} aria-hidden="true" />
+          <Icon name="check" className="mt-[3px] h-[18px] w-[18px] flex-none text-violet" />
           {r}
         </li>
       ))}

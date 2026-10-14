@@ -1,5 +1,6 @@
 @import "@fontsource-variable/geist";
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
 /* Brand tokens from The Seam brand book: warm cream, deep violet, aubergine, Geist. */
 @theme {
@@ -31,6 +32,10 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+  }
+  /* Lenis drives scrolling when active; native smooth scroll would fight it. */
+  html.lenis {
+    scroll-behavior: auto;
   }
   @media (prefers-reduced-motion: reduce) {
     html {
@@ -95,6 +100,17 @@
 @media (prefers-reduced-motion: no-preference) {
   .load-stitch {
     animation: sew 1100ms var(--ease-in-out-strong) both;
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 

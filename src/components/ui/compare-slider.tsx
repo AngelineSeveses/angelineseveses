@@ -1,5 +1,5 @@
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react"
-import { ChevronsLeftRight } from "lucide-react"
+import { Icon } from "@/components/ui/icon"
 import { cn } from "@/lib/utils"
 import type { Shot } from "@/data/content"
 
@@ -65,7 +65,7 @@ export function CompareSlider({ name, before, after, className }: Props) {
       <div className="absolute inset-y-0 z-[2] w-0" style={{ left: `${value}%` }} aria-hidden="true">
         <div className="stitch-v absolute inset-y-0 -left-px w-0.5" />
         <span className="absolute left-0 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-rule bg-paper text-violet">
-          <ChevronsLeftRight className="h-[18px] w-[18px]" strokeWidth={1.8} />
+          <Icon name="drag" className="h-[18px] w-[18px]" />
         </span>
       </div>
     </div>

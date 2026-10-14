@@ -144,8 +144,8 @@ export function Header() {
     <header className="sticky top-[calc(env(safe-area-inset-top,0px)+12px)] z-40 px-[clamp(12px,3vw,32px)]">
       <div
         className={cn(
-          "mx-auto flex h-[60px] max-w-[1120px] items-center justify-between gap-4 rounded-2xl border pl-4 pr-2 backdrop-blur-[18px] backdrop-saturate-[1.6] transition-[background-color,border-color,box-shadow] duration-300",
-          scrolled || open ? "border-ink/12 bg-cream/90 shadow-[0_12px_30px_-20px_rgb(31_24_40/0.4)]" : "border-ink/10 bg-cream/70"
+          "mx-auto flex h-[60px] max-w-[1120px] items-center justify-between gap-4 rounded-card border pl-4 pr-2 backdrop-blur-[18px] backdrop-saturate-[1.6] transition-[background-color,border-color,box-shadow] duration-300",
+          scrolled || open ? "border-ink/15 bg-cream/95" : "border-ink/10 bg-cream/75"
         )}
       >
         <div className="flex items-center gap-5">
@@ -201,7 +201,7 @@ export function Header() {
       <div
         id="mobile-menu"
         hidden={!open}
-        className="absolute inset-x-[clamp(12px,3vw,32px)] top-[calc(100%+8px)] h-[calc(100svh-96px)] overflow-y-auto rounded-2xl border border-ink/10 bg-cream shadow-[0_24px_60px_-30px_rgb(31_24_40/0.5)] lg:hidden"
+        className="absolute inset-x-[clamp(12px,3vw,32px)] top-[calc(100%+8px)] h-[calc(100svh-96px)] overflow-y-auto rounded-card border border-ink/10 bg-cream shadow-raised lg:hidden"
       >
         <div className="flex min-h-full flex-col px-5 py-6 motion-safe:animate-[menu-in_280ms_var(--ease-drawer)]">
           <AudienceToggle className="mb-4 md:hidden" />

@@ -48,7 +48,7 @@ export function CompareSlider({ name, before, after, className }: Props) {
       onPointerCancel={() => (dragging.current = false)}
       onKeyDown={onKey}
       className={cn(
-        "relative aspect-[16/10] max-w-full cursor-ew-resize touch-pan-y select-none overflow-hidden rounded-md border border-rule bg-night",
+        "relative aspect-[16/10] max-w-full cursor-ew-resize touch-pan-y select-none overflow-hidden rounded-card border border-rule bg-night",
         className
       )}
     >
@@ -60,8 +60,8 @@ export function CompareSlider({ name, before, after, className }: Props) {
         className="pointer-events-none absolute inset-0 h-full w-full object-cover object-top"
         style={{ clipPath: `inset(0 0 0 ${value}%)` }}
       />
-      <span className="absolute left-3 top-3 z-[2] rounded-full bg-paper/90 px-2.5 py-0.5 text-[12.5px] text-ink">{before.label}</span>
-      <span className="absolute right-3 top-3 z-[2] rounded-full bg-paper/90 px-2.5 py-0.5 text-[12.5px] text-ink">{after.label}</span>
+      <span className="absolute left-3 top-3 z-[2] rounded-tag bg-paper/90 px-2 py-0.5 text-[12.5px] text-ink">{before.label}</span>
+      <span className="absolute right-3 top-3 z-[2] rounded-tag bg-paper/90 px-2 py-0.5 text-[12.5px] text-ink">{after.label}</span>
       <div className="absolute inset-y-0 z-[2] w-0" style={{ left: `${value}%` }} aria-hidden="true">
         <div className="stitch-v absolute inset-y-0 -left-px w-0.5" />
         <span className="absolute left-0 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-rule bg-paper text-violet">

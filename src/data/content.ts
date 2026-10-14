@@ -29,12 +29,9 @@ import tOt from "@/assets/thumbs/ottawa.jpg"
 
 /** Text in square brackets is a placeholder for Angeline to fill in. */
 export const site = {
-  name: { first: "Angeline", last: "Seveses" },
   email: "angelinesevesesc@gmail.com",
   linkedin: "https://www.linkedin.com/in/angeline-seveses/",
   behance: "https://www.behance.net/angelineseveses",
-  availability: "Open to freelance, part-time and full-time remote work",
-  availabilityShort: "Available for new projects",
   replyTime: "[24–48 hours]",
   hours: "[your hours and time zone]",
 }
@@ -46,6 +43,25 @@ export const resultsBand: { from?: string; to: string; label: string; client: st
   { from: "0", to: "2", label: "contact forms, one in the hero", client: "Impact Cleaning Services" },
   { to: "100", label: "SEO score on 8 live sites", client: "Google Lighthouse, Oct 2026" },
 ]
+
+/** Hero text for each audience; the nav toggle switches between them. */
+export const heroCopy = {
+  business: {
+    eyebrow: "Web designer and WordPress developer",
+    line1: "Websites that",
+    line2: "bring in customers.",
+    sub: "I design and build WordPress sites that make small businesses look trusted and get more enquiries.",
+  },
+  hiring: {
+    eyebrow: "Open to part-time and full-time remote roles",
+    line1: "A designer who",
+    line2: "also builds the site.",
+    sub: "4+ years taking websites from Figma to WordPress for clients in Canada, the US, Australia and the Netherlands.",
+  },
+}
+
+/** Client names shown in the band under the hero. */
+export const clientNames = ["G&L Auto", "CleanSpace", "Impact Cleaning", "Froggy Fence", "New Media Services", "Burlington Food Hall", "D&M Tilt 'n Load", "Ottawa Millwork"]
 
 export type Shot = { src: string; alt: string }
 
@@ -177,7 +193,6 @@ export type ServiceKey = "design" | "wordpress" | "frontend" | "care" | "agency"
 
 export type Service = {
   key: ServiceKey
-  icon: IconName
   title: string
   summary: string
   items: string[]
@@ -191,7 +206,6 @@ export type Service = {
 export const services: Service[] = [
   {
     key: "design",
-    icon: "design",
     title: "Website design and UI/UX",
     summary: "Websites and app interfaces that build trust and guide visitors to act.",
     items: ["Website and landing page design", "Figma wireframes and prototypes", "Website and mobile app UI/UX", "Redesigns of outdated sites"],
@@ -202,7 +216,6 @@ export const services: Service[] = [
   },
   {
     key: "wordpress",
-    icon: "site",
     title: "WordPress development",
     summary: "Fast, flexible WordPress sites your team can manage.",
     items: ["Figma-to-WordPress builds", "Oxygen Builder and Elementor", "Custom Post Types and ACF", "Custom CSS and JavaScript"],
@@ -213,7 +226,7 @@ export const services: Service[] = [
   },
   {
     key: "frontend",
-    icon: "code",
+   
     title: "Frontend development",
     summary: "Designs turned into clean, responsive, interactive code.",
     items: ["HTML, CSS and JavaScript", "React and Tailwind interfaces", "Figma-to-code implementation", "Interactive components and animation"],
@@ -223,7 +236,6 @@ export const services: Service[] = [
   },
   {
     key: "care",
-    icon: "care",
     title: "Website care",
     summary: "Ongoing support so your site stays updated and working.",
     items: ["WordPress, theme and plugin updates", "Backups and security checks", "Speed improvements", "Content updates and layout fixes"],
@@ -238,12 +250,23 @@ export const testimonials = [
   { quote: "Professional, creative, and always on time. They helped us translate our ideas into a powerful online presence that truly connects with our audience.", name: "Celine Terrado", role: "Web Designer, Freelance", initials: "CT" },
 ]
 
-export const steps: { title: string; body: string; icon: IconName; get: string }[] = [
-  { title: "Discover", icon: "chat", body: "We talk through your goals, audience, content and must-haves.", get: "A clear project brief" },
-  { title: "Design", icon: "pen", body: "I plan the structure with wireframes, then design the look in Figma for your feedback.", get: "A Figma design you approve" },
-  { title: "Build", icon: "code", body: "I build the responsive site in WordPress or code and test it on desktop, tablet and mobile.", get: "A working preview site" },
-  { title: "Launch", icon: "rocket", body: "I polish the details, launch, show you how to manage it, and stay available for updates.", get: "Your live site and a handover" },
+export const steps: { title: string; body: string; get: string }[] = [
+  { title: "Discover", body: "We talk through your goals, audience, content and must-haves.", get: "A clear project brief" },
+  { title: "Design", body: "I plan the structure with wireframes, then design the look in Figma for your feedback.", get: "A Figma design you approve" },
+  { title: "Build", body: "I build the responsive site in WordPress or code and test it on desktop, tablet and mobile.", get: "A working preview site" },
+  { title: "Launch", body: "I polish the details, launch, show you how to manage it, and stay available for updates.", get: "Your live site and a handover" },
 ]
+
+/** Quick facts in the About section. */
+export const aboutFacts = [
+  { value: "4+", label: "years designing and building" },
+  { value: "20+", label: "business websites" },
+  { value: "4", label: "countries: Canada, US, Australia, Netherlands" },
+  { value: "UTC+8", label: "Philippine time, overlaps with US, AU and EU hours" },
+]
+
+/** Work arrangements listed in the About section. */
+export const openTo = ["Freelance projects", "Part-time remote", "Full-time remote", "Agency overflow work"]
 
 export const experience = [
   { role: "[Job title] at [Company]", dates: "[Year] to now", body: "Design and build client websites in Figma and WordPress (Oxygen, Elementor, ACF)." },

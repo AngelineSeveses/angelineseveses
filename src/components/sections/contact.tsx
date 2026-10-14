@@ -3,13 +3,12 @@ import { Button } from "@/components/ui/button"
 import { Fill } from "@/components/ui/fill"
 import { useToast } from "@/components/ui/toast"
 import { site, type ServiceKey } from "@/data/content"
-import { Wordmark } from "./header"
 import { cn } from "@/lib/utils"
 
 const lookingFor = ["Freelance project", "Ongoing support", "Agency collaboration", "Part-time role", "Full-time role"] as const
 
 const field =
-  "w-full rounded-md border border-rule-dark bg-cream/5 px-3.5 py-3 text-base text-cream placeholder:text-quiet-dark/60 transition-[border-color,background-color] duration-200 focus:border-soft focus:bg-cream/[0.08] focus:outline-none"
+  "w-full rounded-card border border-rule-dark bg-cream/5 px-3.5 py-3 text-base text-cream placeholder:text-quiet-dark/60 transition-[border-color,background-color] duration-200 focus:border-soft focus:bg-cream/[0.08] focus:outline-none"
 
 type Errors = Partial<Record<"name" | "email" | "details", string>>
 
@@ -145,7 +144,7 @@ export function Contact({ service, setService, type, setType }: {
           </div>
           <p className="text-sm text-quiet-dark sm:col-span-2">Design preview: this form isn't connected yet. Connect it to a form service or your WordPress backend.</p>
           {done && (
-            <div className="rounded-md border border-soft/30 bg-soft/[0.12] p-4 text-[15px] sm:col-span-2">
+            <div className="rounded-card border border-soft/30 bg-soft/[0.12] p-4 text-[15px] sm:col-span-2">
               Your inquiry is ready. In this preview nothing is sent; once the form is connected, it will go straight to your inbox.
             </div>
           )}
@@ -162,61 +161,7 @@ function Field({ id, label, error, full, children }: { id: string; label: string
         {label}
       </label>
       {children}
-      {error && <span className="text-[13.5px] text-[#FFB4B4]">{error}</span>}
+      {error && <span className="text-[13.5px] text-error-on-dark">{error}</span>}
     </div>
-  )
-}
-
-export function Footer() {
-  return (
-    <footer className="dark border-t border-rule-dark bg-night pb-10 pt-14 text-cream">
-      <div className="wrap">
-        <div className="grid gap-8 md:grid-cols-[minmax(0,1.4fr)_repeat(2,minmax(0,1fr))]">
-          <div>
-            <Wordmark dark className="text-[22px]" />
-            <p className="mt-2.5 text-quiet-dark">Web designer and WordPress developer. Designing clear experiences, building websites that work.</p>
-          </div>
-          <div>
-            <h3 className="mb-3 text-sm text-quiet-dark">Pages</h3>
-            <ul>
-              {[
-                ["#work", "Work"],
-                ["#services", "Services"],
-                ["#about", "About"],
-                ["#contact", "Contact"],
-              ].map(([h, l]) => (
-                <li key={h} className="py-[3px]">
-                  <a href={h} className="no-underline hover:underline hover:underline-offset-[3px]">
-                    {l}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="mb-3 text-sm text-quiet-dark">Elsewhere</h3>
-            <ul>
-              <li className="py-[3px]">
-                <a href={site.linkedin} target="_blank" rel="noopener" className="no-underline hover:underline hover:underline-offset-[3px]">
-                  LinkedIn
-                </a>
-              </li>
-              <li className="py-[3px]">
-                <a href={site.behance} target="_blank" rel="noopener" className="no-underline hover:underline hover:underline-offset-[3px]">
-                  Behance
-                </a>
-              </li>
-              <li className="py-[3px]">
-                <Fill dark text="[Instagram link]" />
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="mt-12 flex flex-wrap justify-between gap-4 border-t border-rule-dark pt-6 text-sm text-quiet-dark">
-          <span>© 2026 Angeline Seveses</span>
-          <span>Based in the Philippines, working worldwide</span>
-        </div>
-      </div>
-    </footer>
   )
 }

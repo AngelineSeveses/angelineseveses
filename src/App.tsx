@@ -2,12 +2,19 @@ import { useState } from "react"
 import { ToastProvider } from "@/components/ui/toast"
 import { DragCursor } from "@/components/ui/drag-cursor"
 import { Header } from "@/components/sections/header"
-import { BeforeAfter, ClientBand, Hero } from "@/components/sections/hero"
+import { Hero } from "@/components/sections/hero"
+import { ClientBand } from "@/components/sections/client-band"
+import { BeforeAfter } from "@/components/sections/before-after"
+import { Services } from "@/components/sections/services"
 import { Work } from "@/components/sections/work"
-import { Process, Services, Skills, Testimonials } from "@/components/sections/offer"
-import { About, Faq } from "@/components/sections/story"
+import { Testimonials } from "@/components/sections/testimonials"
+import { Process } from "@/components/sections/process"
+import { About } from "@/components/sections/about"
+import { Toolkit } from "@/components/sections/toolkit"
+import { Faq } from "@/components/sections/faq"
 import { FloatingCta } from "@/components/sections/floating-cta"
-import { Contact, Footer } from "@/components/sections/contact"
+import { Contact } from "@/components/sections/contact"
+import { Footer } from "@/components/sections/footer"
 import { AudienceProvider } from "@/lib/audience"
 import { useSmoothScroll } from "@/lib/motion"
 import type { ServiceKey } from "@/data/content"
@@ -36,7 +43,7 @@ export default function App() {
           <Testimonials />
           <Process />
           <About />
-          <Skills />
+          <Toolkit />
           <Faq />
           <FloatingCta />
           <Contact service={service} setService={setService} type={type} setType={setType} />

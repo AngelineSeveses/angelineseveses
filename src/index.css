@@ -36,6 +36,29 @@
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
   --container-site: 1160px;
+
+  /* Supporting colours that used to be hardcoded in components. */
+  --color-chrome: #ece6dc; /* browser-window bar in the hero showcase */
+  --color-code: #100d14; /* code sample background */
+  --color-code-tag: #9ad7a8; /* code sample: tags */
+  --color-code-attr: #f2c48d; /* code sample: attributes */
+  --color-code-string: #f2a7a7; /* code sample: strings */
+  --color-online: #7ee0a1; /* "available" dot on dark backgrounds */
+  --color-error-on-dark: #ffb4b4; /* form errors on the dark contact section */
+
+  /*
+   * Corner radii. Three steps only:
+   * tag   small labels and scores
+   * card  cards, images, inputs
+   * sheet the large coloured sections that stack down the page
+   * Buttons and the nav toggle stay fully round (rounded-full) as part of the brand.
+   */
+  --radius-tag: 4px;
+  --radius-card: 14px;
+  --radius-sheet: clamp(24px, 3.5vw, 40px);
+
+  /* One elevation, used sparingly: the showcase window and the mobile menu. */
+  --shadow-raised: 0 24px 48px -32px rgb(31 24 40 / 0.45);
 }
 
 @layer base {
@@ -83,7 +106,7 @@
 }
 
 @utility section-pad {
-  padding-block: clamp(72px, 10vw, 136px);
+  padding-block: clamp(64px, 8vw, 112px);
 }
 
 /* The stitch: the brand's only ornament. */
@@ -91,24 +114,12 @@
   background-image: repeating-linear-gradient(180deg, var(--color-soft) 0 8px, transparent 8px 15px);
 }
 
-@utility stitch-h {
-  background-image: repeating-linear-gradient(90deg, var(--color-violet) 0 0.1em, transparent 0.1em 0.18em);
-}
 
-@keyframes sew {
-  from {
-    stroke-dashoffset: 900;
-    opacity: 0;
-  }
+
+
+@keyframes marquee {
   to {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .load-stitch {
-    animation: sew 1100ms var(--ease-in-out-strong) both;
+    transform: translateX(-100%);
   }
 }
 

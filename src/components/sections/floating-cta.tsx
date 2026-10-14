@@ -26,7 +26,7 @@ export function FloatingCta() {
       ref={scope}
       id="cta"
       aria-labelledby="cta-title"
-      className="dark relative isolate z-[1] grid min-h-[clamp(560px,82vh,760px)] place-items-center overflow-hidden rounded-t-[clamp(28px,4vw,48px)] bg-plum py-[clamp(96px,12vw,160px)] text-cream"
+      className="dark relative isolate z-[1] grid min-h-[clamp(560px,82vh,760px)] place-items-center overflow-hidden rounded-t-sheet bg-plum py-[clamp(96px,12vw,160px)] text-cream"
     >
       <Floating sensitivity={-1} className="pointer-events-none z-0 overflow-hidden">
         {floatingShots.map((s, i) => (
@@ -36,7 +36,7 @@ export function FloatingCta() {
               alt=""
               loading="lazy"
               className={cn(
-                "pointer-events-auto block h-full w-full rounded-md border border-cream/[0.12] object-cover object-top",
+                "pointer-events-auto block h-full w-full rounded-[8px] border border-cream/[0.12] object-cover object-top",
                 "transition-transform duration-200 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:hover:scale-105"
               )}
             />

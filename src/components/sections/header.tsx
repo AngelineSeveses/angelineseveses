@@ -1,28 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from "react"
 import { ButtonLink } from "@/components/ui/button"
 import { Icon } from "@/components/ui/icon"
-import { useToast } from "@/components/ui/toast"
 import { getLenis, scrollToHash } from "@/lib/motion"
 import { site } from "@/data/content"
-import { useAudience, type Audience } from "@/lib/audience"
+import { useLocation, useNavigate } from "react-router-dom"
+import { Logo } from "@/components/ui/logo"
 import { cn } from "@/lib/utils"
-
-/** "Angeline" in the sketch weight, "Seveses" in the build weight, joined by a stitch. */
-export function Wordmark({ dark = false, className }: { dark?: boolean; className?: string }) {
-  return (
-    <span className={cn("inline-flex items-baseline whitespace-nowrap tracking-[-0.035em]", className)}>
-      <span className="font-extralight">Angeline</span>
-      <span
-        aria-hidden="true"
-        className="mx-[0.1em] inline-block h-[1.5px] w-[0.42em] -translate-y-[0.32em]"
-        style={{
-          backgroundImage: `repeating-linear-gradient(90deg, ${dark ? "var(--color-soft)" : "var(--color-violet)"} 0 .1em, transparent .1em .18em)`,
-        }}
-      />
-      <span className="font-semibold">Seveses</span>
-    </span>
-  )
-}
 
 const links = [
   { href: "#work", label: "Work" },
@@ -31,40 +14,11 @@ const links = [
   { href: "#faq", label: "FAQ" },
 ]
 
-/** Two-way switch: the hero speaks to businesses or to employers. */
-function AudienceToggle({ className }: { className?: string }) {
-  const { audience, setAudience } = useAudience()
-  const opts: { value: Audience; label: string }[] = [
-    { value: "business", label: "For businesses" },
-    { value: "hiring", label: "For hiring" },
-  ]
-  return (
-    <div role="radiogroup" aria-label="I'm visiting as" className={cn("relative grid grid-cols-2 rounded-full bg-ink/[0.06] p-1 text-[13.5px]", className)}>
-      <span
-        aria-hidden="true"
-        className="absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full bg-paper shadow-[0_1px_3px_rgb(29_26_34/0.12)] transition-transform duration-300 ease-out-strong motion-reduce:transition-none"
-        style={{ transform: audience === "hiring" ? "translateX(100%)" : "none" }}
-      />
-      {opts.map((o) => (
-        <button
-          key={o.value}
-          type="button"
-          role="radio"
-          aria-checked={audience === o.value}
-          onClick={() => setAudience(o.value)}
-          className={cn("relative z-[1] cursor-pointer whitespace-nowrap rounded-full px-3.5 py-1.5 transition-colors duration-200", audience === o.value ? "text-ink" : "text-quiet hover:text-ink")}
-        >
-          {o.label}
-        </button>
-      ))}
-    </div>
-  )
-}
-
 /** Which section is under the header right now. */
-function useActiveSection() {
+function useActiveSection(pathname: string) {
   const [active, setActive] = useState<string | null>(null)
   useEffect(() => {
+    setActive(null)
     const sections = links.map((l) => document.querySelector<HTMLElement>(l.href)).filter((s): s is HTMLElement => !!s)
     const io = new IntersectionObserver(
       (entries) => {
@@ -83,13 +37,15 @@ function useActiveSection() {
       io.disconnect()
       window.removeEventListener("scroll", onScroll)
     }
-  }, [])
+  }, [pathname])
   return active
 }
 
 export function Header() {
-  const toast = useToast()
-  const active = useActiveSection()
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const onHome = pathname === "/"
+  const active = useActiveSection(pathname)
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const navRef = useRef<HTMLDivElement>(null)
@@ -136,6 +92,8 @@ export function Header() {
   const go = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
     setOpen(false)
+    // From another page, go home first; the home page scrolls to the hash once it has rendered.
+    if (!onHome) return navigate(`/${href}`)
     // Wait one frame so the menu has released the scroll lock.
     requestAnimationFrame(() => scrollToHash(href))
   }
@@ -148,12 +106,9 @@ export function Header() {
           scrolled || open ? "border-ink/15 bg-cream/95" : "border-ink/10 bg-cream/75"
         )}
       >
-        <div className="flex items-center gap-5">
-          <a href="#top" aria-label="Angeline Seveses, back to top" className="text-[17px] no-underline" onClick={(e) => go(e, "#top")}>
-            <Wordmark />
-          </a>
-          <AudienceToggle className="hidden md:grid" />
-        </div>
+        <a href="/#top" aria-label="Angeline Seveses, home" className="no-underline" onClick={(e) => go(e, "#top")}>
+          <Logo className="text-[16px] sm:text-[17px]" />
+        </a>
 
         <nav aria-label="Main" className="hidden lg:block">
           <div ref={navRef} className="relative flex items-center gap-0.5">
@@ -168,7 +123,7 @@ export function Header() {
                 ref={(el) => {
                   linkRefs.current[l.href] = el
                 }}
-                href={l.href}
+                href={`/${l.href}`}
                 onClick={(e) => go(e, l.href)}
                 aria-current={active === l.href ? "location" : undefined}
                 className={cn("relative px-3 py-2 text-[14.5px] no-underline transition-colors duration-200", active === l.href ? "text-ink" : "text-quiet hover:text-ink")}
@@ -180,7 +135,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ButtonLink href="#contact" size="sm" variant="soft" onClick={(e) => go(e, "#contact")}>
+          <ButtonLink href="/#contact" size="sm" variant="soft" onClick={(e) => go(e, "#contact")}>
             Start a project
           </ButtonLink>
           <button
@@ -204,16 +159,15 @@ export function Header() {
         className="absolute inset-x-[clamp(12px,3vw,32px)] top-[calc(100%+8px)] h-[calc(100svh-96px)] overflow-y-auto rounded-card border border-ink/10 bg-cream shadow-raised lg:hidden"
       >
         <div className="flex min-h-full flex-col px-5 py-6 motion-safe:animate-[menu-in_280ms_var(--ease-drawer)]">
-          <AudienceToggle className="mb-4 md:hidden" />
           <nav aria-label="Mobile">
             <ul>
               {links.map((l, i) => (
                 <li key={l.href} className="border-b border-rule">
                   <a
                     ref={i === 0 ? firstMenuLinkRef : undefined}
-                    href={l.href}
+                    href={`/${l.href}`}
                     onClick={(e) => go(e, l.href)}
-                    className="flex items-center justify-between py-4 font-serif text-[34px] tracking-[-0.02em] no-underline"
+                    className="flex items-center justify-between py-4 font-sans text-[32px] font-medium tracking-[-0.035em] no-underline"
                   >
                     {l.label}
                     <Icon name="arrowUpRight" className="h-6 w-6 text-violet" />
@@ -223,17 +177,9 @@ export function Header() {
             </ul>
           </nav>
           <div className="mt-auto flex flex-col gap-3 pt-10">
-            <ButtonLink href="#contact" size="lg" onClick={(e) => go(e, "#contact")}>
+            <ButtonLink href="/#contact" size="lg" onClick={(e) => go(e, "#contact")}>
               Start a project
             </ButtonLink>
-            <button
-              type="button"
-              onClick={() => toast("Link your CV PDF here")}
-              className="inline-flex h-14 cursor-pointer items-center justify-center gap-2 rounded-full border border-ink/25 text-[16.5px] font-medium"
-            >
-              <Icon name="cv" className="h-5 w-5 text-violet" />
-              View CV
-            </button>
             <p className="mt-3 flex items-center justify-center gap-2 text-sm text-quiet">
               <Icon name="mail" className="h-4 w-4" />
               <span className="select-all">{site.email}</span>

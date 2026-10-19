@@ -13,14 +13,19 @@ import type { IconName } from "@/components/ui/icon"
 import dm from "@/assets/projects/dm.jpg"
 import ottawa from "@/assets/projects/ottawa.jpg"
 
-import tGl from "@/assets/thumbs/glauto-live.jpg"
-import tNms from "@/assets/thumbs/nms-2508.jpg"
-import tIm from "@/assets/thumbs/impact-live.jpg"
-import tFr from "@/assets/thumbs/froggy-live.jpg"
-import tCs from "@/assets/thumbs/cleanspace-live.jpg"
-import tBu from "@/assets/thumbs/burlington-live.jpg"
-import tDm from "@/assets/thumbs/dm.jpg"
-import tOt from "@/assets/thumbs/ottawa.jpg"
+import lGl from "@/assets/clients/gl-auto.png"
+import lCs from "@/assets/clients/cleanspace.png"
+import lIm from "@/assets/clients/impact.webp"
+import lFr from "@/assets/clients/froggy-fence.png"
+import lNms from "@/assets/clients/new-media-services.png"
+import lBu from "@/assets/clients/burlington-food-hall.png"
+import lDm from "@/assets/clients/dm-tilt-n-load.webp"
+import lOt from "@/assets/clients/ottawa-millwork.svg"
+import lWg from "@/assets/clients/white-glove.png"
+import lDt from "@/assets/clients/digitaletimmerman.png"
+import lFf from "@/assets/clients/fiftyone-fifty.png"
+import lRh from "@/assets/clients/rehive.png"
+
 
 /**
  * Media provenance: every project image is a screenshot of the client's live site (October 2026)
@@ -36,32 +41,43 @@ export const site = {
   hours: "[your hours and time zone]",
 }
 
-/** Before → after numbers for the results band. "from" is omitted for single scores. */
-export const resultsBand: { from?: string; to: string; label: string; client: string }[] = [
-  { from: "0", to: "15", label: "tap-to-call phone links", client: "G&L Auto, auto repair" },
-  { from: "1", to: "4", label: '"Book a Meeting" calls to action', client: "New Media Services, BPO" },
-  { from: "0", to: "2", label: "contact forms, one in the hero", client: "Impact Cleaning Services" },
-  { to: "100", label: "SEO score on 8 live sites", client: "Google Lighthouse, Oct 2026" },
+/** The phrases that travel along the seam in the hero: the UX and business promise in a few words each. */
+export const seamPhrases = [
+  "Design for the users",
+  "Design that converts",
+  "Design for everyone",
+  "Design that earns trust",
+  "Every page with a purpose",
+  "Clear paths to call, book and buy",
 ]
 
-/** Hero text for each audience; the nav toggle switches between them. */
+/** Hero text: one message covering every service. */
 export const heroCopy = {
-  business: {
-    eyebrow: "Web designer and WordPress developer",
-    line1: "Websites that",
-    line2: "bring in customers.",
-    sub: "I design and build WordPress sites that make small businesses look trusted and get more enquiries.",
-  },
-  hiring: {
-    eyebrow: "Open to part-time and full-time remote roles",
-    line1: "A designer who",
-    line2: "also builds the site.",
-    sub: "4+ years taking websites from Figma to WordPress for clients in Canada, the US, Australia and the Netherlands.",
-  },
+  eyebrow: "Web design · WordPress · Frontend · Website care",
+  line1: "Websites that",
+  line2: "bring in customers.",
+  sub: "I design, build and look after websites for small businesses and teams, from the first Figma frame to a fast WordPress or React site.",
 }
 
-/** Client names shown in the band under the hero. */
-export const clientNames = ["G&L Auto", "CleanSpace", "Impact Cleaning", "Froggy Fence", "New Media Services", "Burlington Food Hall", "D&M Tilt 'n Load", "Ottawa Millwork"]
+/**
+ * Client logos for the band under the hero. `h` is the display height in px, tuned per logo so they
+ * read at the same visual size. `solid` marks a logo drawn on a filled shape, which needs a different
+ * filter to keep its detail.
+ */
+export const clientLogos: { name: string; src: string; h: number; solid?: boolean }[] = [
+  { name: "G&L Auto", src: lGl, h: 40 },
+  { name: "CleanSpace", src: lCs, h: 20 },
+  { name: "Impact Cleaning Services", src: lIm, h: 26 },
+  { name: "Froggy Fence", src: lFr, h: 34 },
+  { name: "New Media Services", src: lNms, h: 26 },
+  { name: "Burlington Food Hall", src: lBu, h: 52, solid: true },
+  { name: "D&M Tilt 'n Load", src: lDm, h: 34 },
+  { name: "Ottawa Custom Millwork", src: lOt, h: 28 },
+  { name: "White Glove Services", src: lWg, h: 28 },
+  { name: "Digitaletimmerman", src: lDt, h: 28 },
+  { name: "Fiftyone-fifty", src: lFf, h: 52 },
+  { name: "Rehive", src: lRh, h: 28 },
+]
 
 export type Shot = { src: string; alt: string }
 
@@ -186,13 +202,13 @@ export const devWorks: DevWork[] = [
   },
 ]
 
-export const moreProjects =
-  "White Glove Services, Digitaletimmerman, Genesys, Bidfood, Dutch Dragons, Fiftyone-fifty, Choise School System, Rehive, Crusaders Fence, Fence Haven, J&A Fence, Integra Built, Trace Design, Voxtech, Clarity Growth, Migrate, Streets and Playkido."
-
 export type ServiceKey = "design" | "wordpress" | "frontend" | "care" | "agency"
 
 export type Service = {
   key: ServiceKey
+  /** One-word stage shown above the title, and a short promise under it. */
+  kicker: string
+  tagline: string
   title: string
   summary: string
   items: string[]
@@ -206,6 +222,8 @@ export type Service = {
 export const services: Service[] = [
   {
     key: "design",
+    kicker: "Design",
+    tagline: "Start with a plan",
     title: "Website design and UI/UX",
     summary: "Websites and app interfaces that build trust and guide visitors to act.",
     items: ["Website and landing page design", "Figma wireframes and prototypes", "Website and mobile app UI/UX", "Redesigns of outdated sites"],
@@ -216,6 +234,8 @@ export const services: Service[] = [
   },
   {
     key: "wordpress",
+    kicker: "Build",
+    tagline: "Launch a site your team can run",
     title: "WordPress development",
     summary: "Fast, flexible WordPress sites your team can manage.",
     items: ["Figma-to-WordPress builds", "Oxygen Builder and Elementor", "Custom Post Types and ACF", "Custom CSS and JavaScript"],
@@ -226,7 +246,8 @@ export const services: Service[] = [
   },
   {
     key: "frontend",
-   
+    kicker: "Code",
+    tagline: "Bring a design to life",
     title: "Frontend development",
     summary: "Designs turned into clean, responsive, interactive code.",
     items: ["HTML, CSS and JavaScript", "React and Tailwind interfaces", "Figma-to-code implementation", "Interactive components and animation"],
@@ -236,6 +257,8 @@ export const services: Service[] = [
   },
   {
     key: "care",
+    kicker: "Care",
+    tagline: "Keep your site in shape",
     title: "Website care",
     summary: "Ongoing support so your site stays updated and working.",
     items: ["WordPress, theme and plugin updates", "Backups and security checks", "Speed improvements", "Content updates and layout fixes"],
@@ -260,18 +283,25 @@ export const steps: { title: string; body: string; get: string }[] = [
 /** Quick facts in the About section. */
 export const aboutFacts = [
   { value: "4+", label: "years designing and building" },
-  { value: "20+", label: "business websites" },
+  { value: "100+", label: "projects, local and international" },
   { value: "4", label: "countries: Canada, US, Australia, Netherlands" },
   { value: "UTC+8", label: "Philippine time, overlaps with US, AU and EU hours" },
 ]
 
 /** Work arrangements listed in the About section. */
-export const openTo = ["Freelance projects", "Part-time remote", "Full-time remote", "Agency overflow work"]
+export const openTo = ["Freelance projects", "Part-time remote roles", "Agency overflow work"]
 
+/** Work history, newest first. Roles overlap because they're part-time and freelance. */
 export const experience = [
-  { role: "[Job title] at [Company]", dates: "[Year] to now", body: "Design and build client websites in Figma and WordPress (Oxygen, Elementor, ACF)." },
-  { role: "[Job title] at [Company]", dates: "[Year] to [Year]", body: "[One line on what you did]" },
-  { role: "Freelance web designer and WordPress developer", dates: "[Year] to now", body: "Design and development projects for clients worldwide." },
+  { role: "Intermediate Digital Designer", company: "Virtual Studios PH", dates: "2026 – present", body: "Research, design and code: from understanding users and the problem to designing the solution and building it." },
+  { role: "Web Designer", company: "Secure Line Marketing", dates: "2025 – 2026", body: "Redesigned client websites in Figma, making sure each one met the client's needs and was built to convert." },
+  { role: "WordPress Developer", company: "Digitaletimmerman", dates: "2025 – 2026", body: "Built dynamic WordPress sites with Custom Post Types and ACF, set up for structure, speed and easy editing." },
+  {
+    role: "Web Designer and WordPress Developer",
+    company: "New Media Services",
+    dates: "2023 – 2026",
+    body: "Redesigned the company website in Figma and built it in WordPress, turning marketing goals into clearer pages and more calls to action.",
+  },
 ]
 
 export type Tool = { name: string; icon: IconName }
@@ -289,20 +319,22 @@ export const faqs = [
   { q: "Which WordPress builders do you use?", a: "Mostly Oxygen Builder and Elementor, plus Custom Post Types and ACF when a site needs structured content that's easy to edit." },
   { q: "Can you work on my existing website?", a: "Yes. I can redesign it, fix layouts and mobile issues, improve speed, or keep it updated every month." },
   { q: "Do you work with international clients?", a: `Yes. I'm based in the Philippines and work remotely with clients worldwide. I'm available during ${site.hours}.` },
-  { q: "Are you open to part-time or full-time roles?", a: "Yes. Along with freelance projects, I'm open to part-time and full-time remote roles in web design, WordPress development or UI/UX. Download my CV or send me a message." },
+  { q: "Are you open to part-time roles?", a: "Yes. Along with freelance projects, I'm open to part-time remote roles in web design, WordPress development or UI/UX. Send me a message and I'll share my CV." },
   { q: "Do you work with agencies?", a: "Yes. I can work white-label on design, WordPress builds and ongoing updates." },
   { q: "How much does a website cost?", a: "Most projects start at [$ your price]. The final price depends on the number of pages, features and timeline. Send me your project details and I'll reply with a clear quote." },
 ]
 
+/** Screenshots floating in the contact CTA. All 16:10, the shape of a desktop screen, so each design reads whole. */
+const desk = "aspect-[16/10]"
 export const floatingShots = [
-  { src: tGl, depth: 0.5, className: "top-[8%] left-[6%] w-[clamp(90px,10vw,150px)] aspect-[4/3]" },
-  { src: tNms, depth: 1, className: "top-[10%] left-[28%] w-[clamp(110px,12vw,180px)] aspect-[16/10] max-md:hidden" },
-  { src: tIm, depth: 2, className: "top-[-3%] left-[63%] w-[clamp(110px,11vw,170px)] aspect-[4/5] max-md:top-[3%]" },
-  { src: tFr, depth: 1, className: "top-[6%] left-[82%] w-[clamp(110px,12vw,180px)] aspect-square max-md:hidden" },
-  { src: tCs, depth: 1, className: "top-[42%] left-[-2%] w-[clamp(130px,14vw,210px)] aspect-square max-md:top-[76%] max-md:left-[-6%]" },
-  { src: tBu, depth: 2, className: "top-[66%] left-[78%] w-[clamp(140px,15vw,230px)] aspect-[4/5] max-md:top-[74%] max-md:left-[66%]" },
-  { src: tDm, depth: 4, className: "top-[72%] left-[12%] w-[clamp(170px,19vw,290px)] aspect-[16/10] max-md:top-[86%] max-md:left-[22%]" },
-  { src: tOt, depth: 1, className: "top-[80%] left-[48%] w-[clamp(110px,12vw,180px)] aspect-[4/3] max-md:hidden" },
+  { src: glAfter, depth: 0.5, className: `${desk} top-[7%] left-[4%] w-[clamp(150px,16vw,240px)]` },
+  { src: nmsAfter, depth: 1, className: `${desk} top-[3%] left-[30%] w-[clamp(130px,13vw,200px)] max-md:hidden` },
+  { src: imAfter, depth: 2, className: `${desk} top-[6%] left-[62%] w-[clamp(140px,14vw,210px)] max-md:top-[4%] max-md:left-[58%]` },
+  { src: frAfter, depth: 1, className: `${desk} top-[13%] left-[81%] w-[clamp(150px,16vw,240px)] max-md:hidden` },
+  { src: csAfter, depth: 1, className: `${desk} top-[44%] left-[-3%] w-[clamp(170px,18vw,270px)] max-md:top-[80%] max-md:left-[-8%]` },
+  { src: burlington, depth: 2, className: `${desk} top-[62%] left-[80%] w-[clamp(180px,19vw,290px)] max-md:top-[82%] max-md:left-[60%]` },
+  { src: dm, depth: 4, className: `${desk} top-[76%] left-[13%] w-[clamp(190px,20vw,300px)] max-md:hidden` },
+  { src: ottawa, depth: 1, className: `${desk} top-[83%] left-[50%] w-[clamp(140px,14vw,210px)] max-md:hidden` },
 ]
 
 export type Pin = { x: string; y: string; label: string; why: string }

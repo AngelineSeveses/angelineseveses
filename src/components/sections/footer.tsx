@@ -1,4 +1,5 @@
 import HalftoneWordmarkFooter from "@/components/ui/halftone-wordmark-footer"
+import { useLocation } from "react-router-dom"
 import { site } from "@/data/content"
 import { token } from "@/lib/theme"
 
@@ -7,6 +8,8 @@ import { token } from "@/lib/theme"
  * Brand palette: aubergine ground, cream dots that warm to soft violet when pushed.
  */
 export function Footer() {
+  // Section links point at the homepage when the footer is shown on another page.
+  const base = useLocation().pathname === "/" ? "" : "/"
   return (
     <HalftoneWordmarkFooter
       wordmark="angeline"
@@ -16,10 +19,11 @@ export function Footer() {
         {
           title: "Pages",
           links: [
-            { label: "Work", href: "#work" },
-            { label: "Services", href: "#services" },
-            { label: "About", href: "#about" },
-            { label: "FAQ", href: "#faq" },
+            { label: "Work", href: `${base}#work` },
+            { label: "All projects", href: "/projects" },
+            { label: "Services", href: `${base}#services` },
+            { label: "About", href: `${base}#about` },
+            { label: "FAQ", href: `${base}#faq` },
           ],
         },
         {
@@ -32,7 +36,7 @@ export function Footer() {
         {
           title: "Contact",
           links: [
-            { label: "Start a project", href: "#contact" },
+            { label: "Start a project", href: `${base}#contact` },
             { label: site.email, href: `mailto:${site.email}` },
           ],
         },

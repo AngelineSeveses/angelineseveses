@@ -49,7 +49,7 @@ export function FloatingCta() {
           aria-hidden="true"
           className="pointer-events-none absolute -inset-x-[18%] -inset-y-[16%] -z-10 bg-[radial-gradient(closest-side,rgb(42_24_56/0.95),rgb(42_24_56/0.8)_55%,rgb(42_24_56/0))]"
         />
-        <h2 id="cta-title" className="serif-head text-[clamp(48px,7.4vw,104px)] leading-[0.98]">
+        <h2 id="cta-title" className="display-head text-[clamp(48px,7.4vw,104px)] leading-[0.98]">
           <span className="block font-extralight">Your next website</span>
           <span className="font-semibold">starts here.</span>
         </h2>

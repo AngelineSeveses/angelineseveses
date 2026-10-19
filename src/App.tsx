@@ -1,56 +1,54 @@
-import { useState } from "react"
+import { useEffect } from "react"
+import { Outlet, Route, Routes, useLocation } from "react-router-dom"
 import { ToastProvider } from "@/components/ui/toast"
 import { DragCursor } from "@/components/ui/drag-cursor"
 import { Header } from "@/components/sections/header"
-import { Hero } from "@/components/sections/hero"
-import { ClientBand } from "@/components/sections/client-band"
-import { BeforeAfter } from "@/components/sections/before-after"
-import { Services } from "@/components/sections/services"
-import { Work } from "@/components/sections/work"
-import { Testimonials } from "@/components/sections/testimonials"
-import { Process } from "@/components/sections/process"
-import { About } from "@/components/sections/about"
-import { Toolkit } from "@/components/sections/toolkit"
-import { Faq } from "@/components/sections/faq"
-import { FloatingCta } from "@/components/sections/floating-cta"
-import { Contact } from "@/components/sections/contact"
 import { Footer } from "@/components/sections/footer"
-import { AudienceProvider } from "@/lib/audience"
-import { useSmoothScroll } from "@/lib/motion"
-import type { ServiceKey } from "@/data/content"
+import { HomePage } from "@/pages/home"
+import { ProjectsPage } from "@/pages/projects"
+import { getLenis, ScrollTrigger, useSmoothScroll } from "@/lib/motion"
+
+/**
+ * On a new page, start at the top and re-measure scroll animations.
+ * With a hash (e.g. /#contact) the home page does both itself, then scrolls to the section.
+ */
+function useRouteScroll() {
+  const { pathname, hash } = useLocation()
+  useEffect(() => {
+    if (hash) return
+    getLenis()?.resize()
+    getLenis()?.scrollTo(0, { immediate: true })
+    window.scrollTo(0, 0)
+    const t = window.setTimeout(() => ScrollTrigger.refresh(), 200)
+    return () => window.clearTimeout(t)
+    // Only page changes matter here, not hash changes within a page.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
+}
+
+function Layout() {
+  useRouteScroll()
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+      <DragCursor />
+    </>
+  )
+}
 
 export default function App() {
   useSmoothScroll()
-  const [service, setService] = useState<ServiceKey>("design")
-  const [type, setType] = useState("Freelance project")
-
-  // Service buttons preselect the matching options in the contact form.
-  const pick = (key: ServiceKey) => {
-    setService(key)
-    if (key === "agency") setType("Agency collaboration")
-  }
-
   return (
-    <AudienceProvider>
-      <ToastProvider>
-        <Header />
-        <main id="top">
-          <Hero />
-          <ClientBand />
-          <BeforeAfter />
-          <Services onPick={pick} />
-          <Work />
-          <Testimonials />
-          <Process />
-          <About />
-          <Toolkit />
-          <Faq />
-          <FloatingCta />
-          <Contact service={service} setService={setService} type={type} setType={setType} />
-        </main>
-        <Footer />
-        <DragCursor />
-      </ToastProvider>
-    </AudienceProvider>
+    <ToastProvider>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="projects" element={<ProjectsPage />} />
+          <Route path="*" element={<HomePage />} />
+        </Route>
+      </Routes>
+    </ToastProvider>
   )
 }

@@ -6,3 +6,9 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+# Single-page app: serve index.html for every route (e.g. /projects), let React Router handle it.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -39,6 +39,9 @@
 
   /* Supporting colours that used to be hardcoded in components. */
   --color-chrome: #ece6dc; /* browser-window bar in the hero showcase */
+  --color-device: #1b1820; /* laptop mockup: screen bezel */
+  --color-device-base: #d9d4dc; /* laptop mockup: aluminium base, light edge */
+  --color-device-shade: #a39daa; /* laptop mockup: aluminium base, shaded edge */
   --color-code: #100d14; /* code sample background */
   --color-code-tag: #9ad7a8; /* code sample: tags */
   --color-code-attr: #f2c48d; /* code sample: attributes */
@@ -159,16 +162,15 @@ summary::-webkit-details-marker {
  * Editorial headings: the two-weight pairs used across the site become serif,
  * with the second phrase set in italic. One rule, so every section stays consistent.
  */
-.serif-head {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  font-optical-sizing: auto;
+/* Display headings in Geist: the first phrase light, the second phrase bold (the sketch and the build). */
+.display-head {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  letter-spacing: -0.045em;
 }
-.serif-head .font-extralight {
-  font-weight: 400;
+.display-head .font-extralight {
+  font-weight: 300;
 }
-.serif-head .font-semibold {
-  font-weight: 400;
-  font-style: italic;
+.display-head .font-semibold {
+  font-weight: 600;
 }

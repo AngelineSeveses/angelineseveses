@@ -1,19 +1,15 @@
 import { useEffect, useLayoutEffect, useRef } from "react"
-import { ButtonLink, buttonClass } from "@/components/ui/button"
+import { ButtonLink } from "@/components/ui/button"
 import { Icon } from "@/components/ui/icon"
 import { SplitWords } from "@/components/ui/split-words"
-import { useToast } from "@/components/ui/toast"
 import { gsap, prefersReducedMotion } from "@/lib/motion"
-import { useAudience } from "@/lib/audience"
-import { heroCopy, resultsBand, site } from "@/data/content"
+import { heroCopy as c, seamPhrases } from "@/data/content"
 
-/** Results that ride along the seam in the hero. Each one is a real, credited number. */
-const ribbonText = resultsBand
-  .map((r) => (r.from !== undefined ? `${r.from} → ${r.to} ${r.label}, ${r.client.split(",")[0]}` : `${r.to} ${r.label}`))
-  .join("   ✦   ")
+/** The phrases that ride along the seam in the hero. */
+const ribbonText = seamPhrases.join("   ✦   ")
 
 /**
- * The seam as a flowing stitch across the hero, carrying the results along it.
+ * The seam as a flowing stitch across the hero, carrying the design promises along it.
  * One SVG path, drawn twice: dashed thread underneath, text on top. It drifts slowly and
  * stops when offscreen, when the tab is hidden, or entirely under reduced motion.
  */
@@ -61,9 +57,6 @@ function SeamRibbon() {
 }
 
 export function Hero() {
-  const { audience } = useAudience()
-  const toast = useToast()
-  const c = heroCopy[audience]
   const copyRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
@@ -81,12 +74,11 @@ export function Hero() {
           {c.eyebrow}
         </p>
         <SplitWords
-          key={audience}
           as="h1"
           id="hero-title"
           trigger="load"
           delay={0.05}
-          className="serif-head max-w-[14ch] text-[clamp(52px,8.4vw,124px)] leading-[0.96]"
+          className="display-head max-w-[14ch] text-[clamp(52px,8.4vw,124px)] leading-[0.96]"
         >
           <span className="block font-extralight">{c.line1}</span>
           <span className="block font-semibold">{c.line2}</span>
@@ -95,32 +87,16 @@ export function Hero() {
           {c.sub}
         </p>
         <div data-rise className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          {audience === "business" ? (
-            <>
-              <ButtonLink href="#contact" variant="soft" size="lg">
-                Start a project
-              </ButtonLink>
-              <ButtonLink href="#before-after" variant="ghost" size="lg">
-                See a redesign
-                <Icon name="arrowDown" className="h-[18px] w-[18px]" />
-              </ButtonLink>
-            </>
-          ) : (
-            <>
-              <button type="button" onClick={() => toast("Link your CV PDF here")} className={buttonClass({ variant: "soft", size: "lg" })}>
-                <Icon name="cv" className="h-5 w-5" />
-                View my CV
-              </button>
-              <a href={`mailto:${site.email}`} className={buttonClass({ variant: "ghost", size: "lg" })}>
-                <Icon name="mail" className="h-5 w-5" />
-                Email me
-              </a>
-            </>
-          )}
+          <ButtonLink href="#contact" variant="soft" size="lg">
+            Start a project
+          </ButtonLink>
+          <ButtonLink href="#work" variant="ghost" size="lg">
+            See my work
+            <Icon name="arrowDown" className="h-[18px] w-[18px]" />
+          </ButtonLink>
         </div>
       </div>
       <SeamRibbon />
     </section>
   )
 }
-

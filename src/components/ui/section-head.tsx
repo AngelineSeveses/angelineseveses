@@ -28,7 +28,7 @@ export function SectionHead({ kicker, title, lede, dark = false, align = "split"
     <div className={cn("mb-[clamp(36px,5vw,64px)] grid", layout)}>
       <div>
         {kicker && <span className={cn("mb-3.5 block text-[15px] font-medium", dark ? "text-soft" : "text-violet")}>{kicker}</span>}
-        <SplitWords id={id} className="serif-head text-[clamp(40px,5.6vw,68px)] leading-[1.02]">
+        <SplitWords id={id} className="display-head text-[clamp(40px,5.6vw,68px)] leading-[1.02]">
           {title}
         </SplitWords>
       </div>

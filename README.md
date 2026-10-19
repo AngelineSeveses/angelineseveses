@@ -17,17 +17,20 @@ Open http://localhost:5173.
 npm run build
 ```
 
-The site is built into `dist/`. Netlify reads `netlify.toml` (build command `npm run build`, publish `dist`), so every push to `main` redeploys.
+The site is built into `dist/`. Netlify reads `netlify.toml` (build command `npm run build`, publish `dist`), so every push to `main` redeploys. The same file sends every URL to `index.html`, so `/projects` works when opened directly.
 
 ## Where to change things
 
 | To change | Edit |
 |---|---|
-| Any text: hero, projects, services, steps, FAQ, about facts, client names | `src/data/content.ts` |
+| Any text: hero, services, steps, testimonials, FAQ, about facts, client logos | `src/data/content.ts` |
+| Projects (homepage shows four, `/projects` shows all, split into Redesign and Development tabs) | `src/data/projects.ts` (`homeProjects` picks the four) |
+| Client logos in the band under the hero | `src/assets/clients/`, listed in `clientLogos` in `content.ts` |
+| The logo and favicon | `src/components/ui/logo.tsx` and `public/favicon.svg` |
 | Colours, fonts, corner radii, the one shadow, easing curves | the `@theme` block at the top of `src/index.css` |
 | Project screenshots | `src/assets/projects/` (CTA thumbnails in `src/assets/thumbs/`) |
 | A single section's layout | `src/components/sections/<section>.tsx` (one file per section) |
-| Page order | `src/App.tsx` |
+| Page order | `src/pages/home.tsx` (routes and the shared header and footer are in `src/App.tsx`) |
 | Navigation links | `links` at the top of `src/components/sections/header.tsx` |
 | Footer links and wordmark | `src/components/sections/footer.tsx` |
 | Icons and tool logos | `src/components/ui/icon.tsx` (Solar icons and SVG Logos, bundled offline) |
@@ -39,7 +42,7 @@ Anything written in `[square brackets]` in `content.ts` shows on the page as a d
 Defined once in `src/index.css` and used as Tailwind classes:
 
 - **Colours:** `cream`, `paper`, `ink`, `quiet`, `violet`, `plum`, `band`, `lavender`, `mist`, plus supporting tokens such as `chrome` (browser bar) and `code-*` (code sample). Use them as `bg-plum`, `text-violet` and so on.
-- **Fonts:** `font-serif` (Newsreader) for headings and quotes, `font-sans` (Geist) for everything else. Section headings use the `.serif-head` class, which turns the second phrase italic.
+- **Fonts:** `font-sans` (Geist) for headings and text, `font-serif` (Newsreader) for quotes, big numbers and the logo. Section headings use the `.display-head` class: first phrase light, second phrase bold.
 - **Radii:** `rounded-tag` (small labels), `rounded-card` (cards, images, inputs), `rounded-sheet` (the large coloured sections). Buttons and the nav toggle are fully round.
 - **Shadow:** `shadow-raised`, used only for the hero window and the mobile menu.
 
@@ -65,4 +68,4 @@ Canvas code can't read Tailwind classes, so the footer reads colours with `token
 ## Still to connect
 
 - **Contact form:** it validates but doesn't send yet. Connect it to a form service (Formspree, Web3Forms) or a backend in `src/components/sections/contact.tsx`.
-- **CV links:** the "View CV" and "Download CV" buttons show a placeholder message until a CV PDF is linked.
+- **Bidfood:** its site announces it is closing (last orders 16 October). Remove it from `projects.ts` once it goes offline.

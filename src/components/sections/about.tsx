@@ -1,8 +1,7 @@
-import { Button, ButtonLink } from "@/components/ui/button"
+import { ButtonLink } from "@/components/ui/button"
 import { Fill } from "@/components/ui/fill"
 import { Icon } from "@/components/ui/icon"
-import { Monogram } from "@/components/ui/monogram"
-import { useToast } from "@/components/ui/toast"
+import { LogoMark } from "@/components/ui/logo"
 import { aboutFacts, experience, openTo } from "@/data/content"
 import { cn } from "@/lib/utils"
 
@@ -11,7 +10,7 @@ function Portrait() {
     <figure className="m-0">
       <div className="grid aspect-[4/5] place-items-center rounded-card bg-lavender p-8 text-center">
         <div className="grid justify-items-center gap-3.5">
-          <Monogram />
+          <LogoMark className="text-[96px]" />
           <Fill text="[Add your photo, 4:5]" />
         </div>
       </div>
@@ -42,14 +41,13 @@ function Facts() {
 function ExperienceTimeline() {
   return (
     <ol className="mt-4 border-l border-rule pl-6">
-      {experience.map((job, i) => (
-        <li key={i} className="relative pb-6 last:pb-0">
+      {experience.map((job) => (
+        <li key={job.company} className="relative pb-6 last:pb-0">
           <span aria-hidden="true" className="absolute -left-[30px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-violet bg-cream" />
-          <p className="text-[13.5px] text-quiet">
-            <Fill text={job.dates} />
-          </p>
-          <p className="mt-0.5 font-medium">
-            <Fill text={job.role} />
+          <p className="text-[13.5px] tabular-nums text-quiet">{job.dates}</p>
+          <p className="mt-0.5">
+            <span className="font-medium">{job.role}</span>
+            <span className="text-quiet"> · {job.company}</span>
           </p>
           <p className="mt-1 text-[15px] text-quiet">
             <Fill text={job.body} />
@@ -62,7 +60,6 @@ function ExperienceTimeline() {
 
 /** About: portrait, one serif statement, quick facts, experience, and the ways to work together. */
 export function About() {
-  const toast = useToast()
   return (
     <section id="about" className="section-pad" aria-labelledby="a-title">
       <div className="wrap grid items-start gap-[clamp(40px,6vw,88px)] lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
@@ -72,7 +69,7 @@ export function About() {
 
         <div>
           <span className="mb-3.5 block text-[15px] font-medium text-violet">About</span>
-          <h2 id="a-title" className="serif-head text-[clamp(44px,6vw,80px)] leading-[1]">
+          <h2 id="a-title" className="display-head text-[clamp(44px,6vw,80px)] leading-[1]">
             <span className="font-extralight">Hi, I'm</span> <span className="font-semibold">Angeline.</span>
           </h2>
           <p className="mt-6 max-w-[30ch] font-serif text-[clamp(23px,2.3vw,30px)] leading-[1.28] tracking-[-0.01em]">
@@ -104,10 +101,6 @@ export function About() {
             <ButtonLink href="#contact" variant="soft">
               Let's work together
             </ButtonLink>
-            <Button variant="ghost" onClick={() => toast("Link your CV PDF here")}>
-              <Icon name="cv" className="h-5 w-5" />
-              Download CV
-            </Button>
           </div>
         </div>
       </div>

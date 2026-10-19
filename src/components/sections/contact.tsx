@@ -5,7 +5,7 @@ import { useToast } from "@/components/ui/toast"
 import { site, type ServiceKey } from "@/data/content"
 import { cn } from "@/lib/utils"
 
-const lookingFor = ["Freelance project", "Ongoing support", "Agency collaboration", "Part-time role", "Full-time role"] as const
+const lookingFor = ["Freelance project", "Ongoing support", "Agency collaboration", "Part-time role"] as const
 
 const field =
   "w-full rounded-card border border-rule-dark bg-cream/5 px-3.5 py-3 text-base text-cream placeholder:text-quiet-dark/60 transition-[border-color,background-color] duration-200 focus:border-soft focus:bg-cream/[0.08] focus:outline-none"

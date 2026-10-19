@@ -12,12 +12,19 @@ let lenis: Lenis | null = null
 export const getLenis = () => lenis
 
 /** Scroll to an in-page anchor, through Lenis when it is running, accounting for the sticky header. */
-export function scrollToHash(hash: string) {
+/** Scroll to a section by hash. `immediate` jumps without animating (used when arriving from another page). */
+export function scrollToHash(hash: string, { immediate = false } = {}) {
   const target = document.querySelector<HTMLElement>(hash)
   if (!target) return
-  if (lenis) lenis.scrollTo(target, { offset: -72 })
-  else target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" })
-  history.replaceState(null, "", hash)
+  if (lenis) {
+    // Lenis caches the page height; after a route change it would clamp to the old page's length.
+    lenis.resize()
+    lenis.scrollTo(target, { offset: -72, immediate })
+  } else {
+    target.scrollIntoView({ behavior: immediate || prefersReducedMotion() ? "auto" : "smooth", block: "start" })
+  }
+  // Keep React Router's history state; only the hash changes.
+  history.replaceState(history.state, "", hash)
 }
 
 export const prefersReducedMotion = () =>
